@@ -23,7 +23,9 @@ async def create_superuser(session: AsyncSession) -> None:
         return
 
     new_user = UserCreate(
-        email=settings.FIRST_SUPERUSER_EMAIL, password=settings.FIRST_SUPERUSER_PASSWORD
+        email=settings.FIRST_SUPERUSER_EMAIL,
+        password=settings.FIRST_SUPERUSER_PASSWORD,
+        display_name="admin",
     )
     user = await crud_user.create(session, new_user, is_superuser=True)
     await crud_user.activate(session, user)

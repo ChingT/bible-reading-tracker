@@ -13,17 +13,20 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         return result.first()
 
     async def create(
-        self, session: AsyncSession, obj_in: UserCreate, is_superuser: bool = False
+        self,
+        session: AsyncSession,
+        obj_in: UserCreate,
+        is_admin: bool = False,
+        is_superuser: bool = False,
     ) -> User:
         db_obj = User(
             email=obj_in.email,
+            display_name=obj_in.display_name,
             hashed_password=get_password_hash(obj_in.password),
+            is_admin=is_admin,
             is_superuser=is_superuser,
         )
-        session.add(db_obj)
-        await session.commit()
-        await session.refresh(db_obj)
-        return db_obj
+        return await super().create(session, obj_in=db_obj)
 
     async def update(
         self, session: AsyncSession, db_obj: User, obj_in: UserUpdate

@@ -46,7 +46,7 @@ async def get_current_active_user(
 CurrentUser = Annotated[User, Depends(get_current_active_user)]
 
 
-async def get_current_superuser(current_user: CurrentUser) -> User:
-    if not current_user.is_superuser:
+async def get_current_admin_superuser(current_user: CurrentUser) -> User:
+    if not current_user.is_superuser and not current_user.is_admin:
         raise no_permissions_exception
     return current_user

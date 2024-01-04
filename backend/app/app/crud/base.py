@@ -1,5 +1,4 @@
 from typing import Any, Generic, TypeVar
-from uuid import UUID
 
 from fastapi import Query
 from sqlmodel import SQLModel, select
@@ -31,11 +30,11 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         result = await session.exec(query)
         return result.all()
 
-    async def get(self, session: AsyncSession, id: UUID) -> ModelType | None:
+    async def get(self, session: AsyncSession, id: int) -> ModelType | None:
         return await session.get(self.model, id)
 
     async def create(
-        self, session: AsyncSession, obj_in: CreateSchemaType
+        self, session: AsyncSession, obj_in: CreateSchemaType | ModelType
     ) -> ModelType:
         db_obj = self.model.model_validate(obj_in)
         session.add(db_obj)
