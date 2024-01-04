@@ -1,7 +1,5 @@
-import asyncio
 from collections.abc import AsyncGenerator
 
-import pytest
 import pytest_asyncio
 from httpx import AsyncClient
 from sqlmodel import SQLModel, delete
@@ -15,14 +13,6 @@ from app.models.user import User
 from app.tests.utils.user import create_test_user, get_user_authentication_headers
 
 target_metadata = SQLModel.metadata
-
-
-@pytest.fixture(scope="session")
-def event_loop():
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    yield loop
-    loop.close()
 
 
 @pytest_asyncio.fixture(scope="session")
@@ -60,13 +50,23 @@ async def superuser(testdb_setup_sessionmaker, session: AsyncSession) -> User:
 
 
 @pytest_asyncio.fixture()
+async def admin_user(testdb_setup_sessionmaker, session: AsyncSession) -> User:
+    return await create_test_user(session, is_admin=True)
+
+
+@pytest_asyncio.fixture()
 async def normal_user(testdb_setup_sessionmaker, session: AsyncSession) -> User:
-    return await create_test_user(session, is_superuser=False)
+    return await create_test_user(session)
 
 
 @pytest_asyncio.fixture()
 async def superuser_token_headers(superuser: User) -> dict[str, str]:
     return await get_user_authentication_headers(superuser)
+
+
+@pytest_asyncio.fixture()
+async def admin_user_token_headers(admin_user: User) -> dict[str, str]:
+    return await get_user_authentication_headers(admin_user)
 
 
 @pytest_asyncio.fixture()

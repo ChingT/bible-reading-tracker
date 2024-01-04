@@ -72,8 +72,6 @@ class Settings(BaseSettings):
 
     FIRST_SUPERUSER_EMAIL: EmailStr
     FIRST_SUPERUSER_PASSWORD: str
-    TEST_USER_EMAIL: EmailStr
-    TEST_USER_PASSWORD: str
 
     EMAIL_TEMPLATES_DIR: str = "app/email-templates/build_html"
     SMTP_TLS: bool = True

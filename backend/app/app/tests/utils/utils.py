@@ -2,7 +2,7 @@ import secrets
 import string
 
 
-def random_lower_string(k=32, alphabet=string.ascii_lowercase) -> str:
+def random_lower_string(k=16, alphabet=string.ascii_lowercase) -> str:
     return "".join(secrets.choice(alphabet) for _ in range(k))
 
 
