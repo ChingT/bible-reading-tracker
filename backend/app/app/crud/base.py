@@ -1,6 +1,6 @@
+from collections.abc import Sequence
 from typing import Any, Generic, TypeVar
 
-from fastapi import Query
 from sqlmodel import SQLModel, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -11,7 +11,7 @@ UpdateSchemaType = TypeVar("UpdateSchemaType", bound=SQLModel)
 
 class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     def __init__(self, model: type[ModelType]):
-        """CRUD object with default methods to Create, Read, Update, Delete (CRUD).
+        """CRUD object with default methods to create, read, update, delete and list.
 
         **Parameters**
 
@@ -21,20 +21,17 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         self.model = model
 
     async def list(
-        self,
-        session: AsyncSession,
-        offset: int = 0,
-        limit: int = Query(default=100, le=100),
-    ) -> list[ModelType] | None:
+        self, session: AsyncSession, offset: int = 0, limit: int = 100
+    ) -> Sequence[ModelType]:
         query = select(self.model).offset(offset).limit(limit)
         result = await session.exec(query)
         return result.all()
 
-    async def get(self, session: AsyncSession, id: int) -> ModelType | None:
-        return await session.get(self.model, id)
+    async def get(self, session: AsyncSession, **primary_kwargs) -> ModelType | None:
+        return await session.get(self.model, primary_kwargs)
 
     async def create(
-        self, session: AsyncSession, obj_in: CreateSchemaType | ModelType
+        self, session: AsyncSession, obj_in: CreateSchemaType
     ) -> ModelType:
         db_obj = self.model.model_validate(obj_in)
         session.add(db_obj)
@@ -59,6 +56,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         await session.refresh(db_obj)
         return db_obj
 
-    async def delete(self, session: AsyncSession, db_obj: ModelType) -> None:
+    async def delete(self, session: AsyncSession, db_obj: ModelType) -> ModelType:
         await session.delete(db_obj)
         await session.commit()
+        return db_obj
