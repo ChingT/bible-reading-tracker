@@ -2,7 +2,7 @@ from fastapi import status
 from httpx import AsyncClient
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.crud.user import crud_user
+from app import crud
 from app.main import app
 from app.tests.utils.user import TEST_USER_EMAIL, TEST_USER_NAME, create_random_user
 from app.tests.utils.utils import random_email, random_lower_string
@@ -66,7 +66,7 @@ async def test_create_user_new_email(
     )
     assert r.status_code == status.HTTP_201_CREATED
     created_user = r.json()
-    user = await crud_user.get_by_email(session, data["email"])
+    user = await crud.user.get_by_email(session, data["email"])
     assert user
     assert user.email == created_user["email"] == data["email"]
 
@@ -81,7 +81,7 @@ async def test_get_existing_user(
     )
     assert r.status_code == status.HTTP_200_OK
     api_user = r.json()
-    existing_user = await crud_user.get_by_email(session, email=user.email)
+    existing_user = await crud.user.get_by_email(session, email=user.email)
     assert existing_user
     assert existing_user.email == api_user["email"]
 

@@ -2,6 +2,7 @@ import logging
 
 from fastapi import APIRouter, Body, HTTPException, status
 
+from app import crud
 from app.api.deps import FormDataDep, SessionDep
 from app.api.routers.users import user_not_found_exception
 from app.api.utils import (
@@ -17,7 +18,6 @@ from app.core.token_utils import (
     generate_tokens_response,
 )
 from app.crud.auth import crud_auth_code
-from app.crud.user import crud_user
 from app.models.auth import (
     AuthCodeUpdate,
     CodeType,
@@ -43,7 +43,7 @@ async def login_access_token(
     session: SessionDep, form_data: FormDataDep
 ) -> TokensResponse:
     """Get an access token for future requests using email and password."""
-    user = await crud_user.authenticate(session, form_data.username, form_data.password)
+    user = await crud.user.authenticate(session, form_data.username, form_data.password)
     if not user:
         raise HTTPException(
             status.HTTP_400_BAD_REQUEST, detail="Incorrect email or password"
@@ -68,15 +68,16 @@ async def refresh_token(
 async def register_user(session: SessionDep, data: UserCreate) -> Message:
     """Register new user."""
     email = data.email
-    if user := await crud_user.get_by_email(session, email):
+    if user := await crud.user.get_by_email(session, email):
         if user.is_active:
             raise email_registered_exception
     else:
-        user = await crud_user.create(session, data)
+        user = await user.create(session, data)
 
     auth_code = await crud_auth_code.create_for_user(session, user)
     token = generate_registration_validation_token(auth_code.code)
-    send_new_account_email.delay(email, token)
+    # send_new_account_email.delay(email, token)
+    send_new_account_email(email, token)
     return Message(msg="New account email sent")
 
 
@@ -94,7 +95,7 @@ async def validate_register_user(
     if user.is_active:
         raise active_user_exception
 
-    await crud_user.activate(session, user)
+    await user.activate(session, user)
     await crud_auth_code.update(session, auth_code, AuthCodeUpdate(is_used=True))
     return Message(msg="Account activated successfully")
 
@@ -103,7 +104,7 @@ async def validate_register_user(
 async def reset_password(session: SessionDep, data: UserRecoverPassword) -> Message:
     """Send password reset email."""
     email = data.email
-    user = await crud_user.get_by_email(session, email)
+    user = await crud.user.get_by_email(session, email)
     if not user:
         raise user_not_found_exception
     if not user.is_active:
@@ -111,7 +112,8 @@ async def reset_password(session: SessionDep, data: UserRecoverPassword) -> Mess
 
     auth_code = await crud_auth_code.create_for_user(session, user)
     token = generate_password_reset_validation_token(auth_code.code)
-    send_reset_password_email.delay(email, token)
+    # send_reset_password_email.delay(email, token)
+    send_reset_password_email(email, token)
     return Message(msg="Password recovery email sent")
 
 
@@ -129,9 +131,7 @@ async def validate_reset_password(session: SessionDep, body: NewPassword) -> Mes
     if not user.is_active:
         raise inactive_user_exception
 
-    await crud_user.update(
-        session, user, UserUpdatePassword(password=body.new_password)
-    )
+    await user.update(session, user, UserUpdatePassword(password=body.new_password))
     crud_auth_code.update(session, auth_code, AuthCodeUpdate(is_used=True))
     return Message(msg="Password updated successfully")
 
