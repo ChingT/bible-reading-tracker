@@ -78,3 +78,7 @@ ignore = [
     "N805",
     "FBT002",
 ]
+
+[tool.ruff.extend-per-file-ignores]
+"session.py" = ["SIM300"]
+"app/tests/utils.py" = ["S311"]
