@@ -26,4 +26,4 @@ class CRUDAuthCode(CRUDBase[AuthCode, AuthCodeCreate, AuthCodeUpdate]):
         return await self.create(session, AuthCodeCreate(user_id=user.id))
 
 
-crud_auth_code = CRUDAuthCode(AuthCode)
+auth_code = CRUDAuthCode(AuthCode)

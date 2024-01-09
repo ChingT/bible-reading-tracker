@@ -17,7 +17,6 @@ from app.core.token_utils import (
     generate_registration_validation_token,
     generate_tokens_response,
 )
-from app.crud.auth import crud_auth_code
 from app.models.auth import (
     AuthCodeUpdate,
     CodeType,
@@ -74,7 +73,7 @@ async def register_user(session: SessionDep, data: UserCreate) -> Message:
     else:
         user = await user.create(session, data)
 
-    auth_code = await crud_auth_code.create_for_user(session, user)
+    auth_code = await crud.auth_code.create_for_user(session, user)
     token = generate_registration_validation_token(auth_code.code)
     # send_new_account_email.delay(email, token)
     send_new_account_email(email, token)
@@ -87,7 +86,7 @@ async def validate_register_user(
 ) -> Message:
     """Validate registration token and activate the account."""
     code = decode_token(token, CodeType.REGISTER)
-    auth_code = await crud_auth_code.get_by_code(session, code)
+    auth_code = await crud.auth_code.get_by_code(session, code)
     if not auth_code or auth_code.is_used:
         raise credentials_exception
 
@@ -96,7 +95,7 @@ async def validate_register_user(
         raise active_user_exception
 
     await user.activate(session, user)
-    await crud_auth_code.update(session, auth_code, AuthCodeUpdate(is_used=True))
+    await crud.auth_code.update(session, auth_code, AuthCodeUpdate(is_used=True))
     return Message(msg="Account activated successfully")
 
 
@@ -110,7 +109,7 @@ async def reset_password(session: SessionDep, data: UserRecoverPassword) -> Mess
     if not user.is_active:
         raise inactive_user_exception
 
-    auth_code = await crud_auth_code.create_for_user(session, user)
+    auth_code = await crud.auth_code.create_for_user(session, user)
     token = generate_password_reset_validation_token(auth_code.code)
     # send_reset_password_email.delay(email, token)
     send_reset_password_email(email, token)
@@ -121,7 +120,7 @@ async def reset_password(session: SessionDep, data: UserRecoverPassword) -> Mess
 async def validate_reset_password(session: SessionDep, body: NewPassword) -> Message:
     """Validate password reset token and reset the password."""
     code = decode_token(body.token, CodeType.PASSWORD_RESET)
-    auth_code = await crud_auth_code.get_by_code(session, code)
+    auth_code = await crud.auth_code.get_by_code(session, code)
     if not auth_code or auth_code.is_used:
         raise credentials_exception
 
@@ -132,7 +131,7 @@ async def validate_reset_password(session: SessionDep, body: NewPassword) -> Mes
         raise inactive_user_exception
 
     await user.update(session, user, UserUpdatePassword(password=body.new_password))
-    crud_auth_code.update(session, auth_code, AuthCodeUpdate(is_used=True))
+    crud.auth_code.update(session, auth_code, AuthCodeUpdate(is_used=True))
     return Message(msg="Password updated successfully")
 
 
