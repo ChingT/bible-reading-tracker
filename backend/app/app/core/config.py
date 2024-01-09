@@ -1,22 +1,6 @@
-"""File with environment variables and general configuration logic.
-
-`SECRET_KEY`, `ENVIRONMENT` etc. map to env variables with the same names.
-
-Pydantic priority ordering:
-
-1. (Most important, will overwrite everything) - environment variables
-2. `.env` file in root folder of project
-3. Default values
-
-For project name, version, description we use pyproject.toml
-For the rest, we use file `.env` (gitignored), see `.env.example`
-
-Note, complex types like lists are read as json-encoded strings.
-"""
-
 import tomllib
+from enum import Enum
 from pathlib import Path
-from typing import Literal
 
 from pydantic import AnyHttpUrl, EmailStr, PostgresDsn, field_validator
 from pydantic_core.core_schema import ValidationInfo
@@ -28,10 +12,16 @@ with Path.open(f"{PROJECT_DIR}/pyproject.toml", "rb") as f:
     PYPROJECT_CONTENT = tomllib.load(f)["tool"]["poetry"]
 
 
+class ModeEnum(str, Enum):
+    development = "development"
+    production = "production"
+    testing = "testing"
+
+
 class Settings(BaseSettings):
     # CORE SETTINGS
+    MODE: ModeEnum = ModeEnum.development
     SECRET_KEY: str
-    ENVIRONMENT: Literal["DEV", "PYTEST", "STG", "PRD"] = "DEV"
     SECURITY_BCRYPT_ROUNDS: int = 12
 
     ACCESS_TOKEN_EXPIRE_HOURS: int = 24 * 7

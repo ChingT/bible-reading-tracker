@@ -5,7 +5,7 @@ from httpx import AsyncClient
 from sqlmodel import SQLModel, delete
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.core.config import settings
+from app.core.config import ModeEnum, settings
 from app.db.session import SessionLocal, engine
 from app.main import app
 from app.models import *  # noqa: F403
@@ -18,7 +18,7 @@ target_metadata = SQLModel.metadata
 @pytest_asyncio.fixture(scope="session")
 async def testdb_setup_sessionmaker():
     # assert if we use TEST_DB URL for 100%
-    assert settings.ENVIRONMENT == "PYTEST"
+    assert settings.MODE == ModeEnum.testing  # noqa: SIM300
 
     # always drop and create test db tables between tests session
     async with engine.begin() as conn:
