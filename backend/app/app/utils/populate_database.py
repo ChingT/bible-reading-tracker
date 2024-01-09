@@ -7,6 +7,7 @@ from app import crud
 from app.core.config import settings
 from app.main import logger
 from app.models.book import BookCreate, BookEnum
+from app.models.plan import PlanCreate
 from app.models.unit import UnitCreate
 from app.models.user import UserCreate
 
@@ -54,3 +55,18 @@ async def populate_books_units(session: AsyncSession) -> None:
                         session, UnitCreate(book_id=book.id, chapter=chapter)
                     )
                     logger.info("Unit %s created", unit)
+
+
+async def populate_plans(session: AsyncSession) -> None:
+    csv_file_path = source_root / "reading_plans.csv"
+    with Path.open(csv_file_path, encoding="utf-8") as csv_file:
+        csv_reader = csv.DictReader(csv_file)
+        for row in csv_reader:
+            data = dict(**row)
+
+            if not (plan := await crud.plan.get_by_title(session, data["title"])):
+                data_in = PlanCreate(
+                    title=data["title"], description=data["description"]
+                )
+                plan = await crud.plan.create(session, data_in)
+                logger.info("Plan %s created", plan)

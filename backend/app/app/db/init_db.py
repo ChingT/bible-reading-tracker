@@ -1,13 +1,18 @@
 import asyncio
 
 from app.db.session import SessionLocal
-from app.utils.populate_database import create_superuser, populate_books_units
+from app.utils.populate_database import (
+    create_superuser,
+    populate_books_units,
+    populate_plans,
+)
 
 
 async def main() -> None:
     async with SessionLocal() as session:
         await create_superuser(session)
         await populate_books_units(session)
+        await populate_plans(session)
 
 
 if __name__ == "__main__":
