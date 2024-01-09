@@ -1,6 +1,7 @@
 from pydantic import EmailStr
-from sqlmodel import Column, Field, SQLModel, String
+from sqlmodel import Column, Field, Relationship, SQLModel, String
 
+from .auth import AuthCode
 from .base_model import BaseModel
 
 
@@ -17,6 +18,10 @@ class UserBase(SQLModel):
 
 class User(BaseModel, UserBase, table=True):
     hashed_password: str
+
+    auth_code: AuthCode = Relationship(
+        back_populates="user", sa_relationship_kwargs={"cascade": "all, delete"}
+    )
 
 
 class UserCreate(SQLModel):

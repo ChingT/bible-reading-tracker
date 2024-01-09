@@ -11,7 +11,7 @@ from app.api.utils import (
     no_permissions_exception,
     user_not_found_exception,
 )
-from app.core.token_utils import TokenType, decode_token
+from app.core.token_utils import CodeType, decode_token
 from app.db.session import SessionLocal
 from app.models.user import User
 
@@ -28,7 +28,7 @@ FormDataDep = Annotated[OAuth2PasswordRequestForm, Depends()]
 
 
 async def get_current_user(session: SessionDep, token: TokenDep) -> User:
-    if user_id := decode_token(token, TokenType.ACCESS):
+    if user_id := decode_token(token, CodeType.ACCESS):
         if user := await session.get(User, user_id):
             return user
         raise user_not_found_exception

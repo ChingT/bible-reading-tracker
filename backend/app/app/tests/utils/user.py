@@ -1,7 +1,7 @@
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.config import settings
-from app.core.token_utils import TokenType, create_token
+from app.core.token_utils import CodeType, create_token
 from app.crud.user import crud_user
 from app.models.user import User, UserCreate
 from app.tests.utils.utils import random_email, random_lower_string
@@ -49,6 +49,6 @@ async def create_random_user(
 
 async def get_user_authentication_headers(user: User) -> dict[str, str]:
     access_token = create_token(
-        user.id, settings.ACCESS_TOKEN_EXPIRE_HOURS, TokenType.ACCESS
+        user.id, settings.ACCESS_TOKEN_EXPIRE_HOURS, CodeType.ACCESS
     )
     return {"Authorization": f"Bearer {access_token}"}
