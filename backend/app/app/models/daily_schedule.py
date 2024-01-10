@@ -15,7 +15,9 @@ class DailySchedule(BaseUUIDModel, table=True):
     plan_id: UUID = Field(foreign_key="plan.id")
     date: datetime = Field(unique=True)
     units: list[Unit] = Relationship(
-        back_populates="daily_schedules", link_model=ScheduleUnitLink
+        back_populates="daily_schedules",
+        link_model=ScheduleUnitLink,
+        sa_relationship_kwargs={"lazy": "subquery"},
     )
 
 
@@ -36,4 +38,4 @@ class DailyScheduleUpdate(SQLModel):
 
 
 class DailyScheduleOut(BaseUUIDModel, DailyScheduleBase):
-    pass
+    units: list[Unit]
