@@ -3,6 +3,7 @@ from sqlmodel import Column, Field, Relationship, SQLModel, String
 
 from .auth import AuthCode
 from .base_model import BaseModel
+from .user_schedule_link import UserScheduleLink
 
 
 class UserBase(SQLModel):
@@ -21,6 +22,9 @@ class User(BaseModel, UserBase, table=True):
 
     auth_code: AuthCode = Relationship(
         back_populates="user", sa_relationship_kwargs={"cascade": "all, delete"}
+    )
+    finished_schedule_links: list[UserScheduleLink] = Relationship(
+        back_populates="user"
     )
 
 

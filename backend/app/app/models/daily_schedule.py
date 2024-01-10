@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import TYPE_CHECKING
 from uuid import UUID
 
 from sqlmodel import Field, Relationship, SQLModel
@@ -6,6 +7,9 @@ from sqlmodel import Field, Relationship, SQLModel
 from .base_model import BaseUUIDModel
 from .plan import Plan
 from .unit import ScheduleUnitLink, Unit
+
+if TYPE_CHECKING:
+    from user_schedule_link import UserScheduleLink
 
 
 class DailySchedule(BaseUUIDModel, table=True):
@@ -18,6 +22,9 @@ class DailySchedule(BaseUUIDModel, table=True):
         back_populates="daily_schedules",
         link_model=ScheduleUnitLink,
         sa_relationship_kwargs={"lazy": "subquery"},
+    )
+    user_links: list["UserScheduleLink"] = Relationship(
+        back_populates="finished_schedule"
     )
 
 
