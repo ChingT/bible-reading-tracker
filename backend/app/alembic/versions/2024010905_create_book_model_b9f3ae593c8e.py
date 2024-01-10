@@ -24,10 +24,12 @@ def upgrade():
         sa.Column("id", sqlmodel.sql.sqltypes.GUID(), nullable=False),
         sa.Column("full_name", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("short_name", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+        sa.Column("order", sa.Integer(), nullable=False),
         sa.Column("book_type", sa.Enum("NT", "OT", name="bookenum"), nullable=False),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("full_name"),
         sa.UniqueConstraint("short_name"),
+        sa.UniqueConstraint("order"),
     )
     op.create_index(op.f("ix_book_id"), "book", ["id"], unique=False)
     # ### end Alembic commands ###

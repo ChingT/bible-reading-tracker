@@ -18,6 +18,7 @@ class Book(BaseUUIDModel, table=True):
     full_name: str = Field(unique=True)
     short_name: str = Field(unique=True)
     book_type: BookEnum
+    order: int
 
     units: list["Unit"] = Relationship(back_populates="book")
 
@@ -26,6 +27,7 @@ class BookBase(SQLModel):
     full_name: str
     short_name: str
     book_type: BookEnum
+    order: int
 
 
 class BookCreate(BookBase):

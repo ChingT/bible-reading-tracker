@@ -33,14 +33,13 @@ async def populate_books_units(session: AsyncSession) -> None:
     csv_file_path = source_root / "bible_books.csv"
     with Path.open(csv_file_path, encoding="utf-8") as csv_file:
         csv_reader = csv.DictReader(csv_file)
-        for row in csv_reader:
-            data = dict(**row)
-
+        for index, data in enumerate(csv_reader):
             if not (book := await crud.book.get_by_name(session, data["full_name"])):
                 data_in = BookCreate(
                     full_name=data["full_name"],
                     short_name=data["short_name"],
                     book_type=BookEnum(data["book_type"]),
+                    order=index + 1,
                 )
                 book = await crud.book.create(session, data_in)
                 logger.info("Book %s created", book)
