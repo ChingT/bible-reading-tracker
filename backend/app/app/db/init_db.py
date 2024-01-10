@@ -1,6 +1,7 @@
 import asyncio
 
 from app.db.session import SessionLocal
+from app.utils.create_daily_schedules import populate_daily_schedules
 from app.utils.populate_database import (
     create_superuser,
     populate_books_units,
@@ -13,6 +14,7 @@ async def main() -> None:
         await create_superuser(session)
         await populate_books_units(session)
         await populate_plans(session)
+        await populate_daily_schedules(session)
 
 
 if __name__ == "__main__":
