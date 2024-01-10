@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Query, status
 
 from app import crud
 from app.api.deps import CurrentUser, SessionDep, get_current_admin_superuser
-from app.api.utils import email_registered_exception, user_not_found_exception
+from app.api.exceptions import email_registered_exception, user_not_found_exception
 from app.models.user import UserCreate, UserOut, UserUpdate
 
 router = APIRouter()

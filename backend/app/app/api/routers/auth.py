@@ -4,12 +4,12 @@ from fastapi import APIRouter, Body, HTTPException, status
 
 from app import crud
 from app.api.deps import FormDataDep, SessionDep
-from app.api.routers.users import user_not_found_exception
-from app.api.utils import (
+from app.api.exceptions import (
     active_user_exception,
     credentials_exception,
     email_registered_exception,
     inactive_user_exception,
+    user_not_found_exception,
 )
 from app.core.token_utils import (
     decode_token,

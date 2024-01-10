@@ -5,7 +5,7 @@ from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.api.utils import (
+from app.api.exceptions import (
     credentials_exception,
     inactive_user_exception,
     no_permissions_exception,
