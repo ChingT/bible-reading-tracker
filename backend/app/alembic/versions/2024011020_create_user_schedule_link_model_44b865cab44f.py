@@ -26,7 +26,7 @@ def upgrade():
         sa.Column("created_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(
             ["finished_schedule_id"],
-            ["daily_schedule.id"],
+            ["schedule.id"],
         ),
         sa.ForeignKeyConstraint(
             ["user_id"],

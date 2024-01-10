@@ -4,8 +4,8 @@ from fastapi import APIRouter, Query
 
 from app import crud
 from app.api.deps import SessionDep
-from app.models.daily_schedule import DailyScheduleOut
 from app.models.plan import PlanOut
+from app.models.schedule import ScheduleOut
 
 router = APIRouter()
 
@@ -18,12 +18,12 @@ async def list_plans(
     return await crud.plan.list(session, offset, limit)
 
 
-@router.get("/{plan_id}/daily_schedules")
-async def list_daily_schedules(
+@router.get("/{plan_id}/schedules")
+async def list_schedules(
     session: SessionDep,
     plan_id: UUID,
     offset: int = 0,
     limit: int = Query(default=100, le=100),
-) -> list[DailyScheduleOut]:
+) -> list[ScheduleOut]:
     """Retrieve daily schedules."""
-    return await crud.daily_schedule.list_from_plan(session, plan_id, offset, limit)
+    return await crud.schedule.list_from_plan(session, plan_id, offset, limit)

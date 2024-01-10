@@ -12,14 +12,14 @@ if TYPE_CHECKING:
     from user_schedule_link import UserScheduleLink
 
 
-class DailySchedule(BaseUUIDModel, table=True):
-    __tablename__ = "daily_schedule"
+class Schedule(BaseUUIDModel, table=True):
+    __tablename__ = "schedule"
 
-    plan: Plan = Relationship(back_populates="daily_schedules")
+    plan: Plan = Relationship(back_populates="schedules")
     plan_id: UUID = Field(foreign_key="plan.id")
     date: datetime = Field(unique=True)
     units: list[Unit] = Relationship(
-        back_populates="daily_schedules",
+        back_populates="schedules",
         link_model=ScheduleUnitLink,
         sa_relationship_kwargs={"lazy": "subquery"},
     )
@@ -28,21 +28,21 @@ class DailySchedule(BaseUUIDModel, table=True):
     )
 
 
-class DailyScheduleBase(SQLModel):
+class ScheduleBase(SQLModel):
     plan_id: UUID
     date: datetime
     units: list[Unit] = []
 
 
-class DailyScheduleCreate(DailyScheduleBase):
+class ScheduleCreate(ScheduleBase):
     pass
 
 
-class DailyScheduleUpdate(SQLModel):
+class ScheduleUpdate(SQLModel):
     plan_id: UUID | None = None
     date: datetime | None = None
     units: list[Unit] = []
 
 
-class DailyScheduleOut(BaseUUIDModel, DailyScheduleBase):
+class ScheduleOut(BaseUUIDModel, ScheduleBase):
     units: list[Unit]

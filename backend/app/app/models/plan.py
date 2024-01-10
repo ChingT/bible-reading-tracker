@@ -5,14 +5,14 @@ from sqlmodel import Relationship, SQLModel
 from .base_model import BaseUUIDModel
 
 if TYPE_CHECKING:
-    from .daily_schedule import DailySchedule
+    from .schedule import Schedule
 
 
 class Plan(BaseUUIDModel, table=True):
     title: str
     description: str
 
-    daily_schedules: list["DailySchedule"] = Relationship(back_populates="plan")
+    schedules: list["Schedule"] = Relationship(back_populates="plan")
 
 
 class PlanBase(SQLModel):

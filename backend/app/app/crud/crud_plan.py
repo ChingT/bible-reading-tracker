@@ -5,8 +5,8 @@ from sqlmodel import SQLModel, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.crud.base import CRUDBase
-from app.models.daily_schedule import DailySchedule, DailyScheduleCreate
 from app.models.plan import Plan, PlanCreate, PlanOut
+from app.models.schedule import Schedule, ScheduleCreate
 
 
 class CRUDPlan(CRUDBase[Plan, PlanCreate, SQLModel]):
@@ -16,14 +16,14 @@ class CRUDPlan(CRUDBase[Plan, PlanCreate, SQLModel]):
         return result.first()
 
 
-class CRUDDailySchedule(CRUDBase[DailySchedule, DailyScheduleCreate, SQLModel]):
+class CRUDSchedule(CRUDBase[Schedule, ScheduleCreate, SQLModel]):
     async def list_from_plan(
         self, session: AsyncSession, plan_id: UUID, offset: int = 0, limit: int = 100
-    ) -> Sequence[DailySchedule]:
+    ) -> Sequence[Schedule]:
         query = (
-            select(DailySchedule)
-            .where(DailySchedule.plan_id == plan_id)
-            .order_by(DailySchedule.date)
+            select(Schedule)
+            .where(Schedule.plan_id == plan_id)
+            .order_by(Schedule.date)
             .offset(offset)
             .limit(limit)
         )
@@ -32,4 +32,4 @@ class CRUDDailySchedule(CRUDBase[DailySchedule, DailyScheduleCreate, SQLModel]):
 
 
 plan = CRUDPlan(Plan)
-daily_schedule = CRUDDailySchedule(DailySchedule)
+schedule = CRUDSchedule(Schedule)

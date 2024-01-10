@@ -5,13 +5,13 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app import crud
 from app.main import logger
 from app.models.book import BookEnum
-from app.models.daily_schedule import DailyScheduleCreate
+from app.models.schedule import ScheduleCreate
 
 YEAR = 2024
 NUM_OF_UNITS_PER_DAY = 2
 
 
-async def populate_daily_schedules(session: AsyncSession) -> None:
+async def populate_schedules(session: AsyncSession) -> None:
     plan = await crud.plan.get_by_title(session, "Sechsmonatiger Lesezeitplan")
     units = await crud.unit.list_by_book_type(
         session, book_type=BookEnum.NT, limit=None
@@ -25,10 +25,10 @@ async def populate_daily_schedules(session: AsyncSession) -> None:
         else:
             daily_units = []
 
-        daily_schedule = await crud.daily_schedule.create(
-            session, DailyScheduleCreate(plan_id=plan.id, date=day, units=daily_units)
+        schedule = await crud.schedule.create(
+            session, ScheduleCreate(plan_id=plan.id, date=day, units=daily_units)
         )
-        logger.info("daily_schedule %s created.", daily_schedule)
+        logger.info("schedule %s created.", schedule)
 
 
 def get_dates_of_year(year: int) -> list[date]:

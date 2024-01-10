@@ -46,7 +46,7 @@ async def populate_books_units(session: AsyncSession) -> None:
 
             for chapter in range(1, int(data["num_chapters"]) + 1):
                 if not (
-                    unit := await crud.unit.get_by_book_chapter(
+                    await crud.unit.get_by_book_chapter(
                         session, book_id=book.id, chapter=chapter
                     )
                 ):
@@ -63,7 +63,7 @@ async def populate_plans(session: AsyncSession) -> None:
         for row in csv_reader:
             data = dict(**row)
 
-            if not (plan := await crud.plan.get_by_title(session, data["title"])):
+            if not (await crud.plan.get_by_title(session, data["title"])):
                 data_in = PlanCreate(
                     title=data["title"], description=data["description"]
                 )
