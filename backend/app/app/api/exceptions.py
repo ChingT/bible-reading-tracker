@@ -18,6 +18,17 @@ class IdNotFoundException(HTTPException, Generic[ModelType]):
         )
 
 
+class NameNotFoundException(HTTPException, Generic[ModelType]):
+    def __init__(
+        self, model: type[ModelType], name: str, headers: dict[str, Any] | None = None
+    ) -> None:
+        super().__init__(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Unable to find the {model.__name__} with name {name}.",
+            headers=headers,
+        )
+
+
 credentials_exception = HTTPException(
     status.HTTP_401_UNAUTHORIZED,
     detail="Could not validate credentials",

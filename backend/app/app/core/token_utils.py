@@ -8,7 +8,7 @@ from app.models.auth import CodeType, JWTTokenPayload, TokensResponse
 JWT_ALGORITHM = "HS256"
 
 
-def generate_tokens_response(subject: str | int) -> TokensResponse:
+def generate_tokens_response(subject: str) -> TokensResponse:
     """Generate tokens and return AccessTokenResponse."""
     access_token = create_token(
         subject, settings.ACCESS_TOKEN_EXPIRE_HOURS, CodeType.ACCESS
@@ -19,7 +19,7 @@ def generate_tokens_response(subject: str | int) -> TokensResponse:
     return TokensResponse(access_token=access_token, refresh_token=refresh_token)
 
 
-def create_token(sub: str | int, exp_hours: float, code_type: CodeType) -> str:
+def create_token(sub: str, exp_hours: float, code_type: CodeType) -> str:
     """Create jwt access or refresh token for user.
 
     Args:
@@ -39,7 +39,7 @@ def create_token(sub: str | int, exp_hours: float, code_type: CodeType) -> str:
     return jwt.encode(claims, settings.SECRET_KEY, JWT_ALGORITHM)
 
 
-def decode_token(token: str, code_type: CodeType) -> str:
+def decode_token(token: str, code_type: CodeType) -> str | None:
     """Decode JWT token and return the subject."""
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[JWT_ALGORITHM])

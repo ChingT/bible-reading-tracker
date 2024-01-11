@@ -9,7 +9,7 @@ from app.main import logger
 from app.models.book import BookCreate, BookEnum
 from app.models.plan import PlanCreate
 from app.models.unit import UnitCreate
-from app.models.user import UserCreate
+from app.models.user import UserCreateFromUser
 
 source_root = Path("app/initial_data")
 
@@ -19,12 +19,12 @@ async def create_superuser(session: AsyncSession) -> None:
         logger.info("Superuser %s exists in database", user)
         return
 
-    new_user = UserCreate(
+    new_user = UserCreateFromUser(
         email=settings.FIRST_SUPERUSER_EMAIL,
         password=settings.FIRST_SUPERUSER_PASSWORD,
         display_name="admin",
     )
-    user = await crud.user.create(session, new_user, is_superuser=True)
+    user = await crud.user.create_from_user(session, new_user, is_superuser=True)
     await crud.user.activate(session, user)
     logger.info("Superuser %s created", user)
 

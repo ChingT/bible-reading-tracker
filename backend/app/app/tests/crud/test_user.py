@@ -68,7 +68,7 @@ async def test_check_if_user_is_normal_user(session: AsyncSession) -> None:
 
 async def test_get_user(session: AsyncSession) -> None:
     user = await create_random_user(session)
-    user_2 = await user.get(session, user.id)
+    user_2 = await crud.user.get(session, id=user.id)
     assert user_2
     assert user.email == user_2.email
     assert jsonable_encoder(user) == jsonable_encoder(user_2)
@@ -78,8 +78,8 @@ async def test_update_user(session: AsyncSession) -> None:
     user = await create_random_user(session)
     new_password = random_lower_string()
     user_in_update = UserUpdatePassword(password=new_password)
-    await user.update(session, user, user_in_update)
-    user_2 = await user.get(session, user.id)
+    await crud.user.update_from_user(session, user, user_in_update)
+    user_2 = await crud.user.get(session, id=user.id)
     assert user_2
     assert user.email == user_2.email
     assert verify_password(new_password, user_2.hashed_password)

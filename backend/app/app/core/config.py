@@ -3,12 +3,13 @@ from enum import Enum
 from pathlib import Path
 
 from pydantic import AnyHttpUrl, EmailStr, PostgresDsn, field_validator
+from pydantic_core import MultiHostUrl
 from pydantic_core.core_schema import ValidationInfo
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 PROJECT_DIR = Path(__file__).parent.parent.parent
 
-with Path.open(f"{PROJECT_DIR}/pyproject.toml", "rb") as f:
+with Path.open(PROJECT_DIR / "pyproject.toml", "rb") as f:
     PYPROJECT_CONTENT = tomllib.load(f)["tool"]["poetry"]
 
 
@@ -21,7 +22,7 @@ class ModeEnum(str, Enum):
 class Settings(BaseSettings):
     # CORE SETTINGS
     MODE: ModeEnum = ModeEnum.development
-    SECRET_KEY: str
+    SECRET_KEY: str = ""
     SECURITY_BCRYPT_ROUNDS: int = 12
 
     ACCESS_TOKEN_EXPIRE_HOURS: int = 24 * 7
@@ -30,7 +31,7 @@ class Settings(BaseSettings):
 
     BACKEND_CORS_ORIGINS: list[AnyHttpUrl] = []
     ALLOWED_HOSTS: list[str] = []
-    SERVER_HOST: AnyHttpUrl
+    SERVER_HOST: str = "http://example.com/"
 
     CELERY_BROKER_URL: str = ""
     CELERY_RESULT_BACKEND: str = ""
@@ -49,7 +50,7 @@ class Settings(BaseSettings):
     ASYNC_DATABASE_URI: str = ""
 
     @field_validator("ASYNC_DATABASE_URI", mode="after")
-    def assemble_db_connection(cls, v: str | None, info: ValidationInfo) -> str:
+    def assemble_db_connection(cls, v: str | MultiHostUrl, info: ValidationInfo) -> str:
         v = v or PostgresDsn.build(
             scheme="postgresql+asyncpg",
             username=info.data["POSTGRES_USER"],
@@ -60,8 +61,8 @@ class Settings(BaseSettings):
         )
         return str(v)
 
-    FIRST_SUPERUSER_EMAIL: EmailStr
-    FIRST_SUPERUSER_PASSWORD: str
+    FIRST_SUPERUSER_EMAIL: EmailStr = "admin@example.com"
+    FIRST_SUPERUSER_PASSWORD: str = "password"
 
     EMAIL_TEMPLATES_DIR: str = "app/email-templates/build_html"
     SMTP_TLS: bool = True

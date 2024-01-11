@@ -24,17 +24,31 @@ class User(BaseModel, UserBase, table=True):
         back_populates="user", sa_relationship_kwargs={"cascade": "all, delete"}
     )
     finished_schedule_links: list[UserScheduleLink] = Relationship(
-        back_populates="user"
+        back_populates="user",
+        sa_relationship_kwargs={"cascade": "all, delete", "lazy": "subquery"},
     )
 
 
-class UserCreate(SQLModel):
+class UserCreateFromUser(SQLModel):
     email: EmailStr
     password: str
     display_name: str
 
 
+class UserCreate(SQLModel):
+    email: EmailStr
+    display_name: str
+    hashed_password: str
+    is_admin: bool
+    is_superuser: bool
+
+
 class UserUpdate(SQLModel):
+    display_name: str | None = None
+    hashed_password: str | None = None
+
+
+class UserUpdateFromUser(SQLModel):
     display_name: str
 
 
@@ -46,5 +60,5 @@ class UserRecoverPassword(SQLModel):
     email: EmailStr
 
 
-class UserOut(UserBase):
+class UserOut(BaseModel, UserBase):
     pass

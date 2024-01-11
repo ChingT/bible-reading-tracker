@@ -2,7 +2,6 @@ from datetime import datetime
 from enum import Enum
 from typing import TYPE_CHECKING
 
-from pydantic import ConfigDict
 from sqlmodel import Field, Relationship, SQLModel
 
 from app.utils.utils import code_generator
@@ -25,15 +24,13 @@ class RefreshTokenRequest(SQLModel):
 
 
 class TokensResponse(SQLModel):
-    model_config = ConfigDict(from_attributes=True)
-
     token_type: str = "bearer"
     access_token: str
     refresh_token: str
 
 
 class JWTTokenPayload(SQLModel):
-    sub: str | int
+    sub: str
     exp: datetime
     nbf: datetime
     code_type_value: str

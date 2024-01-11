@@ -25,7 +25,7 @@ from app.models.auth import (
     TokensResponse,
 )
 from app.models.msg import Message
-from app.models.user import User, UserCreate, UserRecoverPassword, UserUpdatePassword
+from app.models.user import UserCreateFromUser, UserRecoverPassword, UserUpdatePassword
 from app.utils.celery_tasks import (
     send_new_account_email,
     send_reset_password_email,
@@ -49,7 +49,7 @@ async def login_access_token(
         )
     if not user.is_active:
         raise inactive_user_exception
-    return generate_tokens_response(user.id)
+    return generate_tokens_response(str(user.id))
 
 
 @router.post("/refresh-token")
@@ -58,20 +58,20 @@ async def refresh_token(
 ) -> TokensResponse:
     """Get an access token using a refresh token."""
     user_id = decode_token(token.refresh_token, CodeType.REFRESH)
-    if session.get(User, user_id):
+    if user_id and crud.user.get(session, id=user_id):
         return generate_tokens_response(user_id)
     raise credentials_exception
 
 
 @router.post("/registration")
-async def register_user(session: SessionDep, data: UserCreate) -> Message:
+async def register_user(session: SessionDep, data: UserCreateFromUser) -> Message:
     """Register new user."""
     email = data.email
     if user := await crud.user.get_by_email(session, email):
         if user.is_active:
             raise email_registered_exception
     else:
-        user = await user.create(session, data)
+        user = await crud.user.create_from_user(session, data)
 
     auth_code = await crud.auth_code.create_for_user(session, user)
     token = generate_registration_validation_token(auth_code.code)
@@ -94,7 +94,7 @@ async def validate_register_user(
     if user.is_active:
         raise active_user_exception
 
-    await user.activate(session, user)
+    await crud.user.activate(session, user)
     await crud.auth_code.update(session, auth_code, AuthCodeUpdate(is_used=True))
     return Message(msg="Account activated successfully")
 
@@ -121,7 +121,7 @@ async def validate_reset_password(session: SessionDep, body: NewPassword) -> Mes
     """Validate password reset token and reset the password."""
     code = decode_token(body.token, CodeType.PASSWORD_RESET)
     auth_code = await crud.auth_code.get_by_code(session, code)
-    if not auth_code or auth_code.is_used:
+    if auth_code is None or auth_code.is_used:
         raise credentials_exception
 
     user = auth_code.user
@@ -130,8 +130,10 @@ async def validate_reset_password(session: SessionDep, body: NewPassword) -> Mes
     if not user.is_active:
         raise inactive_user_exception
 
-    await user.update(session, user, UserUpdatePassword(password=body.new_password))
-    crud.auth_code.update(session, auth_code, AuthCodeUpdate(is_used=True))
+    await crud.user.update_from_user(
+        session, user, UserUpdatePassword(password=body.new_password)
+    )
+    await crud.auth_code.update(session, auth_code, AuthCodeUpdate(is_used=True))
     return Message(msg="Password updated successfully")
 
 

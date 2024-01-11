@@ -1,25 +1,27 @@
+from typing import Any
+
 from fastapi import APIRouter, Depends, Query, status
 
 from app import crud
 from app.api.deps import CurrentUser, SessionDep, get_current_admin_superuser
 from app.api.exceptions import email_registered_exception, user_not_found_exception
-from app.models.user import UserCreate, UserOut, UserUpdate
+from app.models.user import UserCreateFromUser, UserOut, UserUpdateFromUser
 
 router = APIRouter()
 
 
-@router.get("/me")
-async def read_current_user(current_user: CurrentUser) -> UserOut:
+@router.get("/me", response_model=UserOut)
+async def read_current_user(current_user: CurrentUser) -> Any:
     """Get current user."""
     return current_user
 
 
-@router.patch("/me")
+@router.patch("/me", response_model=UserOut)
 async def update_current_user(
-    session: SessionDep, current_user: CurrentUser, updated_data: UserUpdate
-) -> UserOut:
+    session: SessionDep, current_user: CurrentUser, updated_data: UserUpdateFromUser
+) -> Any:
     """Update current user."""
-    return await crud.user.update(session, current_user, updated_data)
+    return await crud.user.update_from_user(session, current_user, updated_data)
 
 
 @router.delete("/me", status_code=status.HTTP_204_NO_CONTENT)
@@ -33,24 +35,33 @@ async def delete_current_user(session: SessionDep, current_user: CurrentUser):
     "/",
     dependencies=[Depends(get_current_admin_superuser)],
     status_code=status.HTTP_201_CREATED,
+    response_model=UserOut,
 )
-async def create_user(session: SessionDep, user: UserCreate) -> UserOut:
+async def create_user(session: SessionDep, user: UserCreateFromUser) -> Any:
     """Only superuser can perform this operation."""
-    if await user.get_by_email(session, user.email):
+    if await crud.user.get_by_email(session, user.email):
         raise email_registered_exception
-    return await user.create(session, user)
+    return await crud.user.create_from_user(session, user)
 
 
-@router.get("/", dependencies=[Depends(get_current_admin_superuser)])
+@router.get(
+    "/",
+    dependencies=[Depends(get_current_admin_superuser)],
+    response_model=list[UserOut],
+)
 async def read_users(
     session: SessionDep, offset: int = 0, limit: int = Query(default=100, le=100)
-) -> list[UserOut]:
+) -> Any:
     return await crud.user.list(session, offset, limit)
 
 
-@router.get("/{user_id}", dependencies=[Depends(get_current_admin_superuser)])
-async def read_user(session: SessionDep, user_id: int) -> UserOut:
-    db_obj = await crud.user.get(session, user_id)
+@router.get(
+    "/{user_id}",
+    dependencies=[Depends(get_current_admin_superuser)],
+    response_model=UserOut,
+)
+async def read_user(session: SessionDep, user_id: int) -> Any:
+    db_obj = await crud.user.get(session, id=user_id)
     if db_obj is None:
         raise user_not_found_exception
     return db_obj

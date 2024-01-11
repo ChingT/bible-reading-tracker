@@ -3,8 +3,10 @@ from datetime import date, timedelta
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app import crud
+from app.api.exceptions import NameNotFoundException
 from app.main import logger
 from app.models.book import BookEnum
+from app.models.plan import Plan
 from app.models.schedule import ScheduleCreate
 
 YEAR = 2024
@@ -12,7 +14,10 @@ NUM_OF_UNITS_PER_DAY = 2
 
 
 async def populate_schedules(session: AsyncSession) -> None:
-    plan = await crud.plan.get_by_title(session, "Sechsmonatiger Lesezeitplan")
+    name = "Sechsmonatiger Lesezeitplan"
+    plan = await crud.plan.get_by_title(session, name)
+    if plan is None:
+        raise NameNotFoundException(Plan, name)
     units = await crud.unit.list_by_book_type(
         session, book_type=BookEnum.NT, limit=None
     )

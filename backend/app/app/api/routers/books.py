@@ -1,3 +1,5 @@
+from typing import Any
+
 from fastapi import APIRouter, Query
 
 from app import crud
@@ -8,17 +10,17 @@ from app.models.unit import UnitOut
 router = APIRouter()
 
 
-@router.get("/")
+@router.get("/", response_model=list[BookOut])
 async def list_books(
     session: SessionDep, offset: int = 0, limit: int = Query(default=100, le=100)
-) -> list[BookOut]:
+) -> Any:
     """Retrieve books."""
     return await crud.book.list(session, offset, limit)
 
 
-@router.get("/units")
+@router.get("/units", response_model=list[UnitOut])
 async def list_units(
     session: SessionDep, offset: int = 0, limit: int = Query(default=100, le=100)
-) -> list[UnitOut]:
+) -> Any:
     """Retrieve units."""
     return await crud.unit.list(session, offset, limit)
