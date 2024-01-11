@@ -9,7 +9,7 @@ from .plan import Plan
 from .unit import ScheduleUnitLink, Unit
 
 if TYPE_CHECKING:
-    from user_schedule_link import UserScheduleLink
+    from .user_schedule_link import UserScheduleLink
 
 
 class Schedule(BaseUUIDModel, table=True):

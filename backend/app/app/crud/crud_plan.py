@@ -5,12 +5,13 @@ from sqlmodel import SQLModel, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.crud.base import CRUDBase
-from app.models.plan import Plan, PlanCreate, PlanOut
+from app.models.plan import Plan, PlanCreate
 from app.models.schedule import Schedule, ScheduleCreate
+from app.models.user_schedule_link import UserScheduleLink, UserScheduleLinkCreate
 
 
 class CRUDPlan(CRUDBase[Plan, PlanCreate, SQLModel]):
-    async def get_by_title(self, session: AsyncSession, title: str) -> PlanOut | None:
+    async def get_by_title(self, session: AsyncSession, title: str) -> Plan | None:
         query = select(Plan).where(Plan.title == title)
         result = await session.exec(query)
         return result.first()
@@ -31,5 +32,21 @@ class CRUDSchedule(CRUDBase[Schedule, ScheduleCreate, SQLModel]):
         return result.all()
 
 
+class CRUDUserSchedule(CRUDBase[UserScheduleLink, UserScheduleLinkCreate, SQLModel]):
+    async def list_by_plan_and_user(
+        self, session: AsyncSession, user_id: UUID, plan_id: UUID
+    ) -> Sequence[UserScheduleLink]:
+        query = (
+            select(UserScheduleLink)
+            .join(Schedule)
+            .where(Schedule.plan_id == plan_id)
+            .where(UserScheduleLink.user_id == user_id)
+            .order_by(UserScheduleLink.created_at)
+        )
+        result = await session.exec(query)
+        return result.all()
+
+
 plan = CRUDPlan(Plan)
 schedule = CRUDSchedule(Schedule)
+user_schedule_link = CRUDUserSchedule(UserScheduleLink)
