@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 from typing import TYPE_CHECKING
 from uuid import UUID
 
@@ -17,7 +17,7 @@ class Schedule(BaseUUIDModel, table=True):
 
     plan: Plan = Relationship(back_populates="schedules")
     plan_id: UUID = Field(foreign_key="plan.id")
-    date: datetime = Field(unique=True)
+    date: datetime.date = Field(unique=True)
     units: list[Unit] = Relationship(
         back_populates="schedules",
         link_model=ScheduleUnitLink,
@@ -30,18 +30,12 @@ class Schedule(BaseUUIDModel, table=True):
 
 class ScheduleBase(SQLModel):
     plan_id: UUID
-    date: datetime
+    date: datetime.date
     units: list[Unit] = []
 
 
 class ScheduleCreate(ScheduleBase):
     pass
-
-
-class ScheduleUpdate(SQLModel):
-    plan_id: UUID | None = None
-    date: datetime | None = None
-    units: list[Unit] = []
 
 
 class ScheduleOut(BaseUUIDModel, ScheduleBase):

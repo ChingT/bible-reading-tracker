@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+import datetime
 
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -36,15 +36,15 @@ async def populate_schedules(session: AsyncSession) -> None:
         logger.info("schedule %s created.", schedule)
 
 
-def get_dates_of_year(year: int) -> list[date]:
+def get_dates_of_year(year: int) -> list[datetime.date]:
     """Return a list of all dates of a given year."""
-    start_date = date(year, 1, 1)
-    end_date = date(year + 1, 1, 1)
+    start_date = datetime.date(year, 1, 1)
+    end_date = datetime.date(year + 1, 1, 1)
     num_days = (end_date - start_date).days
-    return [(start_date + timedelta(days=days)) for days in range(num_days)]
+    return [(start_date + datetime.timedelta(days=days)) for days in range(num_days)]
 
 
-def is_weekday(day: date) -> bool:
+def is_weekday(day: datetime.date) -> bool:
     """Return True if day is a weekday."""
     return day.isoweekday() in range(1, 6)
 

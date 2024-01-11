@@ -23,7 +23,7 @@ def upgrade():
         "schedule",
         sa.Column("id", sqlmodel.sql.sqltypes.GUID(), nullable=False),
         sa.Column("plan_id", sqlmodel.sql.sqltypes.GUID(), nullable=False),
-        sa.Column("date", sa.DateTime(), nullable=False),
+        sa.Column("date", sa.Date(), nullable=False),
         sa.ForeignKeyConstraint(
             ["plan_id"],
             ["plan.id"],
