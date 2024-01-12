@@ -1,6 +1,7 @@
 from datetime import datetime
 from enum import Enum
 from typing import TYPE_CHECKING
+from uuid import UUID
 
 from sqlmodel import Field, Relationship, SQLModel
 
@@ -45,14 +46,14 @@ class AuthCode(BaseModel, table=True):
     code: str = Field(unique=True, default_factory=code_generator)
     is_used: bool = False
 
-    user_id: int = Field(unique=True, foreign_key="user.id")
+    user_id: UUID = Field(unique=True, foreign_key="user.id")
     user: "User" = Relationship(
         back_populates="auth_code", sa_relationship_kwargs={"lazy": "subquery"}
     )
 
 
 class AuthCodeCreate(SQLModel):
-    user_id: int
+    user_id: UUID
 
 
 class AuthCodeUpdate(SQLModel):

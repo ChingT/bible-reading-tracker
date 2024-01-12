@@ -26,7 +26,7 @@ def upgrade():
         sa.Column("updated_at", sa.DateTime(), nullable=True),
         sa.Column("code", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("is_used", sa.Boolean(), nullable=False),
-        sa.Column("user_id", sa.Integer(), nullable=False),
+        sa.Column("user_id", sqlmodel.sql.sqltypes.GUID(), nullable=False),
         sa.ForeignKeyConstraint(
             ["user_id"],
             ["user.id"],
