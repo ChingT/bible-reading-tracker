@@ -1,20 +1,12 @@
 from typing import Any
-from uuid import UUID
 
-from fastapi import APIRouter, Query, status
-from fastapi.responses import Response
+from fastapi import APIRouter, Query
 
 from app import crud
 from app.api.deps import CurrentUser, SessionDep
-from app.api.exceptions import IdNotFoundException
+from app.api.utils import PlanDep, ScheduleDep
 from app.models.plan import PlanOut
-from app.models.schedule import Schedule, ScheduleOut
-from app.models.user import User
-from app.models.user_schedule_link import (
-    UserScheduleLink,
-    UserScheduleLinkCreate,
-    UserScheduleLinkOut,
-)
+from app.models.schedule import ScheduleOut
 
 router = APIRouter()
 
@@ -27,59 +19,52 @@ async def list_plans(
     return await crud.plan.list(session, offset, limit)
 
 
-@router.get("/{plan_id}/schedules", response_model=list[ScheduleOut])
-async def list_schedules(
+@router.get("/{plan_id}/schedules_without_logged_in")
+async def list_schedules_without_logged_in(
     session: SessionDep,
-    plan_id: UUID,
+    plan: PlanDep,
     offset: int = 0,
     limit: int = Query(default=100, le=100),
-) -> Any:
-    """Retrieve daily schedules."""
-    return await crud.schedule.list_from_plan(session, plan_id, offset, limit)
+) -> list[ScheduleOut]:
+    """Retrieve daily schedules without user needed to be logged-in."""
+    schedules = await crud.schedule.list_from_plan(session, plan.id, offset, limit)
+    return [ScheduleOut.construct(schedule) for schedule in schedules]
 
 
-@router.get("/{plan_id}/user_schedule_links", response_model=list[UserScheduleLinkOut])
-async def list_user_schedule_links(
-    session: SessionDep, current_user: CurrentUser, plan_id: UUID
-) -> Any:
-    """Retrieve finished daily schedules from the plan for the logged-in user."""
-    return await crud.user_schedule_link.list_by_plan_and_user(
-        session, current_user.id, plan_id
+@router.get("/{plan_id}/schedules")
+async def list_schedules(
+    session: SessionDep,
+    current_user: CurrentUser,
+    plan: PlanDep,
+    offset: int = 0,
+    limit: int = Query(default=100, le=100),
+) -> list[ScheduleOut]:
+    """Retrieve daily schedules.
+
+    For each a schedule, show if it is finished by the logged-in user.
+    """
+    schedules = await crud.schedule.list_from_plan(session, plan.id, offset, limit)
+    return [ScheduleOut.construct(schedule, current_user) for schedule in schedules]
+
+
+@router.get("/finished_schedule")
+async def list_schedules_finished_by_user(
+    session: SessionDep,
+    current_user: CurrentUser,
+    offset: int = 0,
+    limit: int = Query(default=100, le=100),
+) -> list[ScheduleOut]:
+    """Retrieve finished daily schedules for the logged-in user."""
+    schedules = await crud.schedule.list_finished_by_user(
+        session, current_user.id, offset, limit
     )
+    return [ScheduleOut.construct(schedule, current_user) for schedule in schedules]
 
 
-@router.patch("/finished_schedule/{schedule_id}", response_model=UserScheduleLinkOut)
+@router.patch("/finished_schedule/{schedule_id}")
 async def toggle_finished_schedule(
-    session: SessionDep, current_user: CurrentUser, schedule_id: UUID
-) -> Any:
+    session: SessionDep, current_user: CurrentUser, schedule: ScheduleDep
+) -> ScheduleOut:
     """Toggle finished daily schedule for the logged-in user."""
-    if user_schedule_link := await get_user_schedule_link(
-        session, user_id=current_user.id, finished_schedule_id=schedule_id
-    ):
-        await crud.user_schedule_link.delete(session, user_schedule_link)
-        return Response(status_code=status.HTTP_204_NO_CONTENT)
-
-    obj_in = UserScheduleLinkCreate(
-        user_id=current_user.id, finished_schedule_id=schedule_id
-    )
-    return await crud.user_schedule_link.create(session, obj_in)
-
-
-async def varify_user_schedule_link(
-    session: SessionDep, user_id: UUID, finished_schedule_id: UUID
-) -> None:
-    if not (await crud.user.get(session, id=user_id)):
-        raise IdNotFoundException(User, user_id)
-
-    if not (await crud.schedule.get(session, id=finished_schedule_id)):
-        raise IdNotFoundException(Schedule, finished_schedule_id)
-
-
-async def get_user_schedule_link(
-    session: SessionDep, user_id: UUID, finished_schedule_id: UUID
-) -> UserScheduleLink | None:
-    await varify_user_schedule_link(session, user_id, finished_schedule_id)
-
-    return await crud.user_schedule_link.get(
-        session, user_id=user_id, finished_schedule_id=finished_schedule_id
-    )
+    schedule = await crud.schedule.toggle_finished(session, schedule, current_user)
+    return ScheduleOut.construct(schedule, current_user)

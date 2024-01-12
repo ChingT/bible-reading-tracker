@@ -1,9 +1,23 @@
+import datetime
+from typing import TYPE_CHECKING
+from uuid import UUID
+
 from pydantic import EmailStr
 from sqlmodel import Column, Field, Relationship, SQLModel, String
 
 from .auth import AuthCode
 from .base_model import BaseModel
-from .user_schedule_link import UserScheduleLink
+
+if TYPE_CHECKING:
+    from .schedule import Schedule
+
+
+class UserScheduleLink(SQLModel, table=True):
+    __tablename__ = "user_schedule_link"
+
+    user_id: UUID = Field(foreign_key="user.id", primary_key=True)
+    finished_schedule_id: UUID = Field(foreign_key="schedule.id", primary_key=True)
+    created_at: datetime.datetime = Field(default_factory=datetime.datetime.utcnow)
 
 
 class UserBase(SQLModel):
@@ -23,9 +37,10 @@ class User(BaseModel, UserBase, table=True):
     auth_code: AuthCode = Relationship(
         back_populates="user", sa_relationship_kwargs={"cascade": "all, delete"}
     )
-    finished_schedule_links: list[UserScheduleLink] = Relationship(
-        back_populates="user",
-        sa_relationship_kwargs={"cascade": "all, delete", "lazy": "subquery"},
+    finished_schedules: list["Schedule"] = Relationship(
+        back_populates="finished_users",
+        link_model=UserScheduleLink,
+        sa_relationship_kwargs={"cascade": "all, delete"},
     )
 
 
