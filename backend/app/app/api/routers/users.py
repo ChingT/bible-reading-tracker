@@ -3,8 +3,8 @@ from typing import Any
 from fastapi import APIRouter, Depends, Query, status
 
 from app import crud
-from app.api.deps import CurrentUser, SessionDep, get_current_admin_superuser
-from app.api.exceptions import email_registered_exception, user_not_found_exception
+from app.api.deps import CurrentUser, SessionDep, UserDep, get_current_admin_superuser
+from app.api.exceptions import email_registered_exception
 from app.models.user import UserCreateFromUser, UserOut, UserUpdateFromUser
 
 router = APIRouter()
@@ -60,8 +60,5 @@ async def read_users(
     dependencies=[Depends(get_current_admin_superuser)],
     response_model=UserOut,
 )
-async def read_user(session: SessionDep, user_id: int) -> Any:
-    db_obj = await crud.user.get(session, id=user_id)
-    if db_obj is None:
-        raise user_not_found_exception
-    return db_obj
+async def read_user(user: UserDep) -> Any:
+    return user

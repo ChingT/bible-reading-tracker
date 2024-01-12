@@ -3,6 +3,7 @@ from uuid import UUID
 
 from fastapi import HTTPException, status
 from sqlmodel import SQLModel
+from sqlmodel.ext.asyncio.session import AsyncSession
 
 ModelType = TypeVar("ModelType", bound=SQLModel)
 
@@ -13,7 +14,7 @@ class IdNotFoundException(HTTPException, Generic[ModelType]):
     ) -> None:
         super().__init__(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Unable to find the {model.__name__} with id {id}.",
+            detail=f"{model.__name__} not found (id={id}).",
             headers=headers,
         )
 
@@ -24,7 +25,7 @@ class NameNotFoundException(HTTPException, Generic[ModelType]):
     ) -> None:
         super().__init__(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Unable to find the {model.__name__} with name {name}.",
+            detail=f"{model.__name__} not found (name={name}).",
             headers=headers,
         )
 
@@ -53,3 +54,21 @@ active_user_exception = HTTPException(
 email_registered_exception = HTTPException(
     status.HTTP_400_BAD_REQUEST, detail="Email already registered"
 )
+
+
+async def get_or_404(
+    session: AsyncSession, model: type[ModelType], instance_id: UUID
+) -> ModelType:
+    """Fetch a model instance by its ID or raise a 404 error if not found.
+
+    session (Session): Database session to execute the operation.
+    model (ModelType): The model class to fetch.
+    instance_id (UUID): The ID of the model instance to fetch.
+
+    Returns
+    -------
+    The fetched model instance.
+    """
+    if instance := await session.get(model, instance_id):
+        return instance
+    raise IdNotFoundException(model, instance_id)

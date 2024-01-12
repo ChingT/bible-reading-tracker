@@ -3,8 +3,7 @@ from typing import Any
 from fastapi import APIRouter, Query
 
 from app import crud
-from app.api.deps import CurrentUser, SessionDep
-from app.api.utils import PlanDep, ScheduleDep
+from app.api.deps import CurrentUser, PlanDep, ScheduleDep, SessionDep
 from app.models.plan import PlanOut
 from app.models.schedule import ScheduleOut
 
