@@ -1,67 +1,67 @@
-full_name,short_name,book_type,num_chapters
-Das 1. Buch Mose (Genesis),1. Mose,Old Testament,50
-Das 2. Buch Mose (Exodus),2. Mose,Old Testament,40
-Das 3. Buch Mose (Levitikus),3. Mose,Old Testament,27
-Das 4. Buch Mose (Numeri),4. Mose,Old Testament,36
-Das 5. Buch Mose (Deuteronomium),5. Mose,Old Testament,34
-Das Buch Josua, Jos.,Old Testament,24
-Das Buch Richter, Ri.,Old Testament,21
-Das Buch Ruth, Ruth,Old Testament,4
-Das 1. Buch Samuel,1. Sam.,Old Testament,31
-Das 2. Buch Samuel,2. Sam.,Old Testament,24
-Das 1. Buch der Könige, 1.Kön.,Old Testament,22
-Das 2. Buch der Könige, 2.Kön.,Old Testament,25
-Das 1. Buch der Chronik, 1.Chr.,Old Testament,29
-Das 2. Buch der Chronik, 2.Chr.,Old Testament,36
-Das Buch Esra, Esra,Old Testament,10
-Das Buch Nehemia, Neh.,Old Testament,13
-Das Buch Esther, Esth.,Old Testament,10
-Das Buch Hiob, Hiob,Old Testament,42
-Die Psalmen, Ps.,Old Testament,150
-Die Sprüche Salomos, Spr.,Old Testament,31
-Der Prediger Salomo, Pred.,Old Testament,12
-Das Hohelied Salomos, Hld.,Old Testament,8
-Das Buch Jesaja, Jes.,Old Testament,66
-Das Buch Jeremia, Jer.,Old Testament,52
-Die Klagelieder des Jeremia, Klgl.,Old Testament,5
-Das Buch Hesekiel, Hes.,Old Testament,48
-Das Buch Daniel, Dan.,Old Testament,12
-Das Buch Hosea, Hos.,Old Testament,14
-Das Buch Joel, Joel,Old Testament,3
-Das Buch Amos, Amos,Old Testament,9
-Das Buch Obadja, Obd.,Old Testament,1
-Das Buch Jona, Jona,Old Testament,4
-Das Buch Micha, Mi.,Old Testament,7
-Das Buch Nahum, Nah.,Old Testament,3
-Das Buch Habakuk, Hab.,Old Testament,3
-Das Buch Zephania, Zeph.,Old Testament,3
-Das Buch Haggai, Hag.,Old Testament,2
-Das Buch Sacharja, Sach.,Old Testament,14
-Das Buch Maleachi, Mal.,Old Testament,4
-Das Evangelium nach Matthäus,Mt.,New Testament,28
-Das Evangelium nach Markus,Mk.,New Testament,16
-Das Evangelium nach Lukas,Lk.,New Testament,24
-Das Evangelium nach Johannes,Joh.,New Testament,21
-Die Apostelgeschichte,Apg.,New Testament,28
-Der Brief an die Römer,Röm.,New Testament,16
-Der 1. Brief an die Korinther,1.Kor.,New Testament,16
-Der 2. Brief an die Korinther,2.Kor.,New Testament,13
-Der Brief an die Galater,Gal.,New Testament,6
-Der Brief an die Epheser,Eph.,New Testament,6
-Der Brief an die Philipper,Phil.,New Testament,4
-Der Brief an die Kolosser,Kol.,New Testament,4
-Der 1. Brief an die Thessalonicher,1.Thess.,New Testament,5
-Der 2. Brief an die Thessalonicher,2.Thess.,New Testament,3
-Der 1. Brief an Timotheus,1.Tim.,New Testament,6
-Der 2. Brief an Timotheus,2.Tim.,New Testament,4
-Der Brief an Titus,Tit.,New Testament,3
-Der Brief an Philemon,Phlm.,New Testament,1
-Der Brief an die Hebräer,Hebr.,New Testament,13
-Der Brief des Jakobus,Jak.,New Testament,5
-Der 1. Brief des Petrus,1.Petr.,New Testament,5
-Der 2. Brief des Petrus,2.Petr.,New Testament,3
-Der 1. Brief des Johannes,1.Joh.,New Testament,5
-Der 2. Brief des Johannes,2.Joh.,New Testament,1
-Der 3. Brief des Johannes,3.Joh.,New Testament,1
-Der Brief des Judas,Jud.,New Testament,1
-Die Offenbarung des Johannes,Offb.,New Testament,22
+book_type,full_name_de,short_name_de,full_name_en,short_name_en
+Old Testament,Das 1. Buch Mose (Genesis),1. Mose,Genesis,Gen.
+Old Testament,Das 2. Buch Mose (Exodus),2. Mose,Exodus,Exo.
+Old Testament,Das 3. Buch Mose (Levitikus),3. Mose,Leviticus,Lev.
+Old Testament,Das 4. Buch Mose (Numeri),4. Mose,Numbers,Num.
+Old Testament,Das 5. Buch Mose (Deuteronomium),5. Mose,Deuteronomy,Deut.
+Old Testament,Das Buch Josua, Jos.,Joshua,Josh.
+Old Testament,Das Buch Richter, Ri.,Judges,Judg.
+Old Testament,Das Buch Ruth, Ruth,Ruth,Ruth
+Old Testament,Das 1. Buch Samuel,1. Sam.,First Samuel,1 Sam.
+Old Testament,Das 2. Buch Samuel,2. Sam.,Second Samuel,2 Sam.
+Old Testament,Das 1. Buch der Könige, 1.Kön.,First Kings,1 Kings
+Old Testament,Das 2. Buch der Könige, 2.Kön.,Second Kings,2 Kings
+Old Testament,Das 1. Buch der Chronik, 1.Chr.,First Chronicles,1 Chron.
+Old Testament,Das 2. Buch der Chronik, 2.Chr.,Second Chronicles,2 Chron.
+Old Testament,Das Buch Esra, Esra,Ezra,Ezra
+Old Testament,Das Buch Nehemia, Neh.,Nehemiah,Neh.
+Old Testament,Das Buch Esther, Esth.,Esther,Esth.
+Old Testament,Das Buch Hiob, Hiob,Job,Job
+Old Testament,Die Psalmen, Ps.,Psalms,Psa.
+Old Testament,Die Sprüche Salomos, Spr.,Proverbs,Prov.
+Old Testament,Der Prediger Salomo, Pred.,Ecclesiastes,Eccl.
+Old Testament,Das Hohelied Salomos, Hld.,Song of Songs,S.S.
+Old Testament,Das Buch Jesaja, Jes.,Isaiah,Isa.
+Old Testament,Das Buch Jeremia, Jer.,Jeremiah,Jer.
+Old Testament,Die Klagelieder des Jeremia, Klgl.,Lamentations,Lam.
+Old Testament,Das Buch Hesekiel, Hes.,Ezekiel,Ezek.
+Old Testament,Das Buch Daniel, Dan.,Daniel,Dan.
+Old Testament,Das Buch Hosea, Hos.,Hosea,Hosea
+Old Testament,Das Buch Joel, Joel,Joel,Joel
+Old Testament,Das Buch Amos, Amos,Amos,Amos
+Old Testament,Das Buch Obadja, Obd.,Obadiah,Obad.
+Old Testament,Das Buch Jona, Jona,Jonah,Jonah
+Old Testament,Das Buch Micha, Mi.,Micah,Micah
+Old Testament,Das Buch Nahum, Nah.,Nahum,Nahum
+Old Testament,Das Buch Habakuk, Hab.,Habakkuk,Hab.
+Old Testament,Das Buch Zephania, Zeph.,Zephaniah,Zeph.
+Old Testament,Das Buch Haggai, Hag.,Haggai,Hag.
+Old Testament,Das Buch Sacharja, Sach.,Zechariah,Zech.
+Old Testament,Das Buch Maleachi, Mal.,Malachi,Mal.
+New Testament,Das Evangelium nach Matthäus,Mt.,The Gospel According to Matthew,Matt.
+New Testament,Das Evangelium nach Markus,Mk.,The Gospel According to Mark,Mark
+New Testament,Das Evangelium nach Lukas,Lk.,The Gospel According to Luke,Luke
+New Testament,Das Evangelium nach Johannes,Joh.,The Gospel According to John,John
+New Testament,Die Apostelgeschichte,Apg.,The Acts of the Apostles,Acts
+New Testament,Der Brief an die Römer,Röm.,The Epistle of Paul to the Romans,Rom.
+New Testament,Der 1. Brief an die Korinther,1.Kor.,The First Epistle of Paul to the Corinthians,1 Cor.
+New Testament,Der 2. Brief an die Korinther,2.Kor.,The Second Epistle of Paul to the Corinthians,2 Cor.
+New Testament,Der Brief an die Galater,Gal.,The Epistle of Paul to the Galatians,Gal.
+New Testament,Der Brief an die Epheser,Eph.,The Epistle of Paul to the Ephesians,Eph.
+New Testament,Der Brief an die Philipper,Phil.,The Epistle of Paul to the Philippians,Phil.
+New Testament,Der Brief an die Kolosser,Kol.,The Epistle of Paul to the Colossians,Col.
+New Testament,Der 1. Brief an die Thessalonicher,1.Thess.,The First Epistle of Paul to the Thessalonians,1 Thes.
+New Testament,Der 2. Brief an die Thessalonicher,2.Thess.,The Second Epistle of Paul to the Thessalonians,2 Thes.
+New Testament,Der 1. Brief an Timotheus,1.Tim.,The First Epistle of Paul to Timothy,1 Tim.
+New Testament,Der 2. Brief an Timotheus,2.Tim.,The Second Epistle of Paul to Timothy,2 Tim.
+New Testament,Der Brief an Titus,Tit.,The Epistle of Paul to Titus,Titus
+New Testament,Der Brief an Philemon,Phlm.,The Epistle of Paul to Philemon,Philem.
+New Testament,Der Brief an die Hebräer,Hebr.,The Epistle to the Hebrews,Heb.
+New Testament,Der Brief des Jakobus,Jak.,The Epistle of James,James
+New Testament,Der 1. Brief des Petrus,1.Petr.,The First Epistle of Peter,1 Pet.
+New Testament,Der 2. Brief des Petrus,2.Petr.,The Second Epistle of Peter,2 Pet.
+New Testament,Der 1. Brief des Johannes,1.Joh.,The First Epistle of John,1 John
+New Testament,Der 2. Brief des Johannes,2.Joh.,The Second Epistle of John,2 John
+New Testament,Der 3. Brief des Johannes,3.Joh.,The Third Epistle of John,3 John
+New Testament,Der Brief des Judas,Jud.,The Epistle of Jude,Jude
+New Testament,Die Offenbarung des Johannes,Offb.,Revelation,Rev.

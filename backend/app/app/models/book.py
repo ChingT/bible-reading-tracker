@@ -6,7 +6,7 @@ from sqlmodel import Field, Relationship, SQLModel
 from .base_model import BaseUUIDModel
 
 if TYPE_CHECKING:
-    from app.models.unit import Unit
+    from app.models.passage import Passage
 
 
 class BookEnum(str, Enum):
@@ -15,17 +15,21 @@ class BookEnum(str, Enum):
 
 
 class Book(BaseUUIDModel, table=True):
-    full_name: str = Field(unique=True)
-    short_name: str = Field(unique=True)
+    full_name_de: str = Field(unique=True)
+    short_name_de: str = Field(unique=True)
+    full_name_en: str = Field(unique=True)
+    short_name_en: str = Field(unique=True)
     book_type: BookEnum
     order: int
 
-    units: list["Unit"] = Relationship(back_populates="book")
+    passages: list["Passage"] = Relationship(back_populates="book")
 
 
 class BookBase(SQLModel):
-    full_name: str
-    short_name: str
+    full_name_de: str
+    short_name_de: str
+    full_name_en: str
+    short_name_en: str
     book_type: BookEnum
     order: int
 

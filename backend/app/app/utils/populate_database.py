@@ -8,7 +8,6 @@ from app.core.config import settings
 from app.main import logger
 from app.models.book import BookCreate, BookEnum
 from app.models.plan import PlanCreate
-from app.models.unit import UnitCreate
 from app.models.user import UserCreateFromUser
 
 source_root = Path("app/initial_data")
@@ -26,34 +25,7 @@ async def create_superuser(session: AsyncSession) -> None:
     )
     user = await crud.user.create_from_user(session, new_user, is_superuser=True)
     await crud.user.activate(session, user)
-    logger.info("Superuser %s created", user)
-
-
-async def populate_books_units(session: AsyncSession) -> None:
-    csv_file_path = source_root / "bible_books.csv"
-    with Path.open(csv_file_path, encoding="utf-8") as csv_file:
-        csv_reader = csv.DictReader(csv_file)
-        for index, data in enumerate(csv_reader):
-            if not (book := await crud.book.get_by_name(session, data["full_name"])):
-                data_in = BookCreate(
-                    full_name=data["full_name"],
-                    short_name=data["short_name"],
-                    book_type=BookEnum(data["book_type"]),
-                    order=index + 1,
-                )
-                book = await crud.book.create(session, data_in)
-                logger.info("Book %s created", book)
-
-            for chapter in range(1, int(data["num_chapters"]) + 1):
-                if not (
-                    await crud.unit.get_by_book_chapter(
-                        session, book_id=book.id, chapter=chapter
-                    )
-                ):
-                    unit = await crud.unit.create(
-                        session, UnitCreate(book_id=book.id, chapter=chapter)
-                    )
-                    logger.info("Unit %s created", unit)
+    logger.info("Superuser created: %s", user)
 
 
 async def populate_plans(session: AsyncSession) -> None:
@@ -68,4 +40,20 @@ async def populate_plans(session: AsyncSession) -> None:
                     title=data["title"], description=data["description"]
                 )
                 plan = await crud.plan.create(session, data_in)
-                logger.info("Plan %s created", plan)
+                logger.info("Plan created: %s", plan)
+
+
+async def populate_books(session: AsyncSession) -> None:
+    csv_file_path = source_root / "bible_books.csv"
+    with Path.open(csv_file_path, encoding="utf-8") as csv_file:
+        csv_reader = csv.DictReader(csv_file)
+        for index, row in enumerate(csv_reader):
+            if await crud.book.get_by_attr(session, short_name_de=row["short_name_de"]):
+                continue
+
+            data = dict(**row)
+            data["book_type"] = BookEnum(row["book_type"])
+            data["order"] = index + 1
+            data_in = BookCreate.model_validate(data)
+            book = await crud.book.create(session, data_in)
+            logger.info("Book created: %s", book)

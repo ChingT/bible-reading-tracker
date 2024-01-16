@@ -30,6 +30,14 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     async def get(self, session: AsyncSession, **primary_kwargs) -> ModelType | None:
         return await session.get(self.model, primary_kwargs)
 
+    async def get_by_attr(self, session: AsyncSession, **kwargs) -> ModelType | None:
+        whereclauses = [
+            getattr(self.model, key) == value for key, value in kwargs.items()
+        ]
+        query = select(self.model).where(*whereclauses)
+        result = await session.exec(query)
+        return result.first()
+
     async def create(
         self, session: AsyncSession, obj_in: CreateSchemaType
     ) -> ModelType:
