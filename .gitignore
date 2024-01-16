@@ -2,6 +2,7 @@
 *.sqlite
 logs
 docker-stack*.yml
+.DS_Store
 
 # postgresql
 data
