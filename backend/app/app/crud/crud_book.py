@@ -6,15 +6,10 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.crud.base import CRUDBase
 from app.models.book import Book, BookCreate, BookEnum
-from app.models.unit import Unit, UnitCreate
+from app.models.passage import Passage, PassageCreate
 
 
 class CRUDBook(CRUDBase[Book, BookCreate, SQLModel]):
-    async def get_by_name(self, session: AsyncSession, full_name: str) -> Book | None:
-        query = select(Book).where(Book.full_name == full_name)
-        result = await session.exec(query)
-        return result.first()
-
     async def list_by_book_type(
         self,
         session: AsyncSession,
@@ -33,33 +28,35 @@ class CRUDBook(CRUDBase[Book, BookCreate, SQLModel]):
         return result.all()
 
 
-class CRUDUnit(CRUDBase[Unit, UnitCreate, SQLModel]):
+class CRUDPassage(CRUDBase[Passage, PassageCreate, SQLModel]):
     async def list_by_book_type(
         self,
         session: AsyncSession,
         book_type: BookEnum | None = None,
         offset: int = 0,
         limit: int | None = 100,
-    ) -> Sequence[Unit]:
+    ) -> Sequence[Passage]:
         query = (
-            select(Unit)
+            select(Passage)
             .where(or_(book_type is None, Book.book_type == book_type))
             .join(Book)
             .order_by(Book.order)
-            .order_by(Unit.chapter)
+            .order_by(Passage.verses)
             .offset(offset)
             .limit(limit)
         )
         result = await session.exec(query)
         return result.all()
 
-    async def get_by_book_chapter(
-        self, session: AsyncSession, book_id: UUID, chapter: int
-    ) -> Unit | None:
-        query = select(Unit).where(Unit.book_id == book_id, Unit.chapter == chapter)
+    async def get_by_book_verses(
+        self, session: AsyncSession, book_id: UUID, verses: str
+    ) -> Passage | None:
+        query = select(Passage).where(
+            Passage.book_id == book_id, Passage.verses == verses
+        )
         result = await session.exec(query)
         return result.first()
 
 
 book = CRUDBook(Book)
-unit = CRUDUnit(Unit)
+passage = CRUDPassage(Passage)

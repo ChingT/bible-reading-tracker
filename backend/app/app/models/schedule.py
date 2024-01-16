@@ -5,8 +5,8 @@ from pydantic import FieldValidationInfo, field_validator
 from sqlmodel import Field, Relationship, SQLModel
 
 from .base_model import BaseUUIDModel
+from .passage import Passage, SchedulePassageLink
 from .plan import Plan
-from .unit import ScheduleUnitLink, Unit
 from .user import User, UserScheduleLink
 
 
@@ -16,9 +16,9 @@ class Schedule(BaseUUIDModel, table=True):
     plan: Plan = Relationship(back_populates="schedules")
     plan_id: UUID = Field(foreign_key="plan.id")
     date: datetime.date = Field(unique=True)
-    units: list[Unit] = Relationship(
+    passages: list[Passage] = Relationship(
         back_populates="schedules",
-        link_model=ScheduleUnitLink,
+        link_model=SchedulePassageLink,
         sa_relationship_kwargs={"lazy": "subquery"},
     )
     finished_users: list[User] = Relationship(
@@ -31,7 +31,7 @@ class Schedule(BaseUUIDModel, table=True):
 class ScheduleBase(SQLModel):
     plan_id: UUID
     date: datetime.date
-    units: list[Unit] = []
+    passages: list[Passage] = []
 
 
 class ScheduleCreate(ScheduleBase):
@@ -39,7 +39,7 @@ class ScheduleCreate(ScheduleBase):
 
 
 class ScheduleOut(BaseUUIDModel, ScheduleBase):
-    units: list[Unit]
+    passages: list[Passage]
     is_finished_by_logged_in_user: bool = False
 
     @classmethod
@@ -48,7 +48,10 @@ class ScheduleOut(BaseUUIDModel, ScheduleBase):
     ) -> "ScheduleOut":
         return cls.model_validate(
             schedule.model_dump(),
-            update={"is_finished_by_logged_in_user": False, "units": schedule.units},
+            update={
+                "is_finished_by_logged_in_user": False,
+                "passages": schedule.passages,
+            },
             context={"user": current_user, "finished_users": schedule.finished_users},
         )
 

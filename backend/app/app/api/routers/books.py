@@ -5,7 +5,7 @@ from fastapi import APIRouter, Query
 from app import crud
 from app.api.deps import SessionDep
 from app.models.book import BookOut
-from app.models.unit import UnitOut
+from app.models.passage import PassageOut
 
 router = APIRouter()
 
@@ -18,9 +18,9 @@ async def list_books(
     return await crud.book.list(session, offset, limit)
 
 
-@router.get("/units", response_model=list[UnitOut])
-async def list_units(
+@router.get("/passages", response_model=list[PassageOut])
+async def list_passages(
     session: SessionDep, offset: int = 0, limit: int = Query(default=100, le=100)
 ) -> Any:
-    """Retrieve units."""
-    return await crud.unit.list(session, offset, limit)
+    """Retrieve passages."""
+    return await crud.passage.list(session, offset, limit)
