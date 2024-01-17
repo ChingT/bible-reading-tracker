@@ -24,8 +24,7 @@ services:
       - MODE=testing
       - POSTGRES_HOST=test-db
     command:
-      "sh -c '/app/prestart.sh && uvicorn app.main:app --workers 2 --host
-      0.0.0.0 --port 8000'"
+      "sh -c 'uvicorn app.main:app --workers 2 --host 0.0.0.0 --port 8000'"
     ports:
       - 8000:8000
     volumes:
