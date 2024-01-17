@@ -75,8 +75,7 @@ async def register_user(session: SessionDep, data: UserCreateFromUser) -> Messag
 
     auth_code = await crud.auth_code.create_for_user(session, user)
     token = generate_registration_validation_token(auth_code.code)
-    # send_new_account_email.delay(email, token)
-    send_new_account_email(email, token)
+    send_new_account_email.delay(email, token)
     return Message(msg="New account email sent")
 
 
@@ -111,8 +110,7 @@ async def reset_password(session: SessionDep, data: UserRecoverPassword) -> Mess
 
     auth_code = await crud.auth_code.create_for_user(session, user)
     token = generate_password_reset_validation_token(auth_code.code)
-    # send_reset_password_email.delay(email, token)
-    send_reset_password_email(email, token)
+    send_reset_password_email.delay(email, token)
     return Message(msg="Password recovery email sent")
 
 
