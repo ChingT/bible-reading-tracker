@@ -13,7 +13,6 @@ from app.models.plan import Plan
 from app.models.schedule import ScheduleCreate
 
 YEAR = 2024
-NUM_OF_PASSAGES_PER_DAY = 2
 
 source_root = Path("app/initial_data")
 
@@ -67,8 +66,3 @@ def get_dates_of_year(year: int) -> list[datetime.date]:
     end_date = datetime.date(year + 1, 1, 1)
     num_days = (end_date - start_date).days
     return [(start_date + datetime.timedelta(days=days)) for days in range(num_days)]
-
-
-def is_weekday(day: datetime.date) -> bool:
-    """Return True if day is a weekday."""
-    return day.isoweekday() in range(1, 6)
