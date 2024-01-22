@@ -20,10 +20,10 @@ app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
     description=settings.DESCRIPTION,
-    openapi_url="/openapi.json",
-    docs_url="/",
+    openapi_url=f"{settings.API_V1_STR}/openapi.json",
+    docs_url=f"{settings.API_V1_STR}/docs",
 )
-app.include_router(api_router)
+app.include_router(api_router, prefix=settings.API_V1_STR)
 
 # Sets all CORS enabled origins
 app.add_middleware(

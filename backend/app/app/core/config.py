@@ -22,6 +22,7 @@ class ModeEnum(str, Enum):
 class Settings(BaseSettings):
     # CORE SETTINGS
     MODE: ModeEnum = ModeEnum.development
+    API_V1_STR: str = "/api"
     SECRET_KEY: str = ""
     SECURITY_BCRYPT_ROUNDS: int = 12
 
