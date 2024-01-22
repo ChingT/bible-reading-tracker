@@ -20,6 +20,10 @@ class CodeType(Enum):
     PASSWORD_RESET = "password-reset"
 
 
+class VerifyAccessTokenRequest(SQLModel):
+    access_token: str
+
+
 class RefreshTokenRequest(SQLModel):
     refresh_token: str
 

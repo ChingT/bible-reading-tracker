@@ -23,6 +23,7 @@ from app.models.auth import (
     NewPassword,
     RefreshTokenRequest,
     TokensResponse,
+    VerifyAccessTokenRequest,
 )
 from app.models.msg import Message
 from app.models.user import UserCreateFromUser, UserRecoverPassword, UserUpdatePassword
@@ -50,6 +51,16 @@ async def login_access_token(
     if not user.is_active:
         raise inactive_user_exception
     return generate_tokens_response(str(user.id))
+
+
+@router.post("/access-token/verification")
+async def verify_access_token(
+    session: SessionDep, token: VerifyAccessTokenRequest
+) -> None:
+    """Verify if an access token is valid."""
+    user_id = decode_token(token.access_token, CodeType.ACCESS)
+    if not user_id or not crud.user.get(session, id=user_id):
+        raise credentials_exception
 
 
 @router.post("/refresh-token")
