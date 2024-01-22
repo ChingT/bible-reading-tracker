@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import useApiRequest from "../../hooks/useApiRequest.js";
 import { ButtonsStyle } from "../../styles/buttons.style.js";
 import {
@@ -12,19 +11,22 @@ import {
 } from "../Layout/Layout.style.js";
 
 function SignUpSection() {
-  const [userEmail, setEmail] = useState("");
-  const navigate = useNavigate();
-  const { sendRequest, error, data } = useApiRequest("noAuth");
+  const [user, setUser] = useState({
+    email: "",
+    password: "",
+    display_name: "",
+  });
 
-  const handleSignUpClick = async (e) => {
-    e.preventDefault();
-    sendRequest("post", "auth/registration/", { email: userEmail });
+  const { sendRequest, error } = useApiRequest();
+
+  const handleInput = (e) => {
+    setUser({ ...user, [e.target.id]: e.target.value });
   };
 
-  if (data !== null) {
-    localStorage.setItem("registered_email", userEmail);
-    navigate("/congratulations");
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    sendRequest("post", "auth/registration", user);
+  };
 
   return (
     <AuthFormContainer>
@@ -36,27 +38,45 @@ function SignUpSection() {
               <input
                 placeholder="Email"
                 type="email"
-                value={userEmail}
-                onChange={(e) => setEmail(e.target.value)}
+                required
+                onChange={handleInput}
+                id="email"
               />
             </div>
             {error?.email && <ErrorMessage>{error.email}</ErrorMessage>}
           </InputFieldContainer>
-          {error?.detail && <ErrorMessage>{error.detail}</ErrorMessage>}
+          <InputFieldContainer>
+            <div className={"input-wrapper"}>
+              <input
+                placeholder="Password"
+                type="password"
+                required
+                onChange={handleInput}
+                id="password"
+              />
+            </div>
+            {error?.password && <ErrorMessage>{error.password}</ErrorMessage>}
+          </InputFieldContainer>
+          <InputFieldContainer>
+            <div className={"input-wrapper"}>
+              <input
+                placeholder="Your Name"
+                type="text"
+                required
+                onChange={handleInput}
+                id="display_name"
+              />
+            </div>
+            {error?.display_name && (
+              <ErrorMessage>{error.display_name}</ErrorMessage>
+            )}
+          </InputFieldContainer>
         </div>
         <div>
-          <ButtonsStyle
-            style={{ marginBottom: "5rem" }}
-            onClick={handleSignUpClick}
-          >
-            Sign Up
-          </ButtonsStyle>
+          <ButtonsStyle onClick={handleSubmit}>Sign Up</ButtonsStyle>
         </div>
       </AuthForm>
-      <AlreadyHaveAnAccountNavLink
-        to="/signin"
-        style={{ marginTop: "-5rem", marginBottom: "1rem" }}
-      >
+      <AlreadyHaveAnAccountNavLink to="/signin">
         Already have an account? Sign in →
       </AlreadyHaveAnAccountNavLink>
     </AuthFormContainer>

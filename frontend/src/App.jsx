@@ -1,31 +1,36 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner.jsx";
-import useAutoFetch from "./hooks/useAutoFetch.js";
+import useApiRequest from "./hooks/useApiRequest.js";
 import PageRoutes from "./routes/index.jsx";
 import { loginUser, logoutUser } from "./store/slices/loggedInUser.js";
 
-const App = () => {
+export default function App() {
+  const token = useSelector((store) => store.loggedInUser.accessToken);
+  const accessToken = token || localStorage.getItem("auth-token");
+  const { sendRequest, error, loading } = useApiRequest();
   const dispatch = useDispatch();
-  const userData = JSON.parse(localStorage.getItem("user"));
-  const accessToken = localStorage.getItem("auth-token");
-
-  const { error, loading } = useAutoFetch("post", "auth/token/verify/", {
-    token: accessToken,
-  });
 
   useEffect(() => {
-    if (error === null) {
-      dispatch(loginUser({ user: userData, accessToken: accessToken }));
-    } else {
-      dispatch(logoutUser());
-      localStorage.clear();
+    if (accessToken) {
+      sendRequest("post", "auth/access-token/verification", {
+        access_token: accessToken,
+      });
     }
-  }, [error, accessToken, dispatch, userData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accessToken]);
 
-  if (loading) return <LoadingSpinner />;
+  useEffect(() => {
+    if (!loading && error === null) {
+      dispatch(loginUser({ accessToken: accessToken }));
+    }
+    if (error !== null) {
+      dispatch(logoutUser());
+      localStorage.removeItem("auth-token");
+    }
+  }, [accessToken, dispatch, error, loading]);
 
-  return <PageRoutes />;
-};
+  if (token || token === null) return <PageRoutes />;
 
-export default App;
+  return <LoadingSpinner />;
+}

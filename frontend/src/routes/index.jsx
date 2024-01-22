@@ -27,9 +27,10 @@ const PageRoutes = () => {
           <Route path="congratulations" element={<CongratsSection />} />
           <Route path="verification" element={<VerificationSection />} />
           <Route path="*" element={<NotFound />} />
-        </Route>
-        <Route element={<ProtectedRoutes />}>
-          <Route path="/profile/:profileId?" element={<ProfilePage />} />
+
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/profile/:profileId?" element={<ProfilePage />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>

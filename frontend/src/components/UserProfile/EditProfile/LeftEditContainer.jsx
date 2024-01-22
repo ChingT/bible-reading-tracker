@@ -12,7 +12,7 @@ import {
 import { CustomFileInputButton } from "./EditProfile.style.js";
 
 const LeftEditContainer = ({ initialAvatar, handleProfileUpdate }) => {
-  const { sendRequest, error, data, loading } = useApiRequest();
+  const { sendRequest, error, data, loading } = useApiRequest(true);
 
   const currentAvatar = data?.avatar || initialAvatar;
 

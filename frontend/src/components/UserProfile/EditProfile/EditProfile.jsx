@@ -1,9 +1,7 @@
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useState } from "react";
 import CheckMarkIcon from "../../../assets/checkmark_new.svg";
 import useApiRequest from "../../../hooks/useApiRequest.js";
 import useAutoFetch from "../../../hooks/useAutoFetch.js";
-import { loginUser } from "../../../store/slices/loggedInUser.js";
 import { CheckMark } from "../../../styles/globalStyles.js";
 import LoadingSpinner from "../../LoadingSpinner/LoadingSpinner.jsx";
 import {
@@ -19,7 +17,7 @@ import { InputWrapper } from "./EditProfile.style.js";
 import LeftEditContainer from "./LeftEditContainer.jsx";
 
 function EditProfile() {
-  const { data, loading } = useAutoFetch("get", "users/me/");
+  const { data, loading } = useAutoFetch("get", "users/me/", "", true);
   const inputFields = {
     first_name: { type: "text", value: data?.first_name, label: "First Name" },
     last_name: { type: "text", value: data?.last_name, label: "Last Name" },
@@ -30,9 +28,8 @@ function EditProfile() {
     about_me: { type: "text", value: data?.about_me, label: "About" },
   };
 
-  const { sendRequest } = useApiRequest();
+  const { sendRequest } = useApiRequest(true);
   const [userData, setUserData] = useState({});
-  const dispatch = useDispatch();
   const [changesSaved, setChangesSaved] = useState(false);
 
   const handleInput = (e) => {
@@ -48,13 +45,6 @@ function EditProfile() {
     setChangesSaved(true);
     setTimeout(() => setChangesSaved(false), 2000);
   };
-
-  useEffect(() => {
-    if (data) {
-      localStorage.setItem("user", JSON.stringify(data));
-      dispatch(loginUser({ user: data }));
-    }
-  }, [data, dispatch]);
 
   if (loading) return <LoadingSpinner />;
   return (

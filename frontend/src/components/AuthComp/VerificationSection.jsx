@@ -20,7 +20,7 @@ const VerificationSection = () => {
     setUserData({ ...userData, [e.target.id]: e.target.value });
   };
 
-  const { sendRequest, error, data } = useApiRequest("noAuth");
+  const { sendRequest, error, data } = useApiRequest();
 
   const handleValidationSubmit = (e) => {
     e.preventDefault();

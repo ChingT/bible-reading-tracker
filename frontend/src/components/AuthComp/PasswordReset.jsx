@@ -13,7 +13,7 @@ import {
 
 export default function PasswordResetRequest() {
   const [userEmail, setEmail] = useState("");
-  const { sendRequest, error, data } = useApiRequest("noAuth");
+  const { sendRequest, error, data } = useApiRequest();
   const navigate = useNavigate();
 
   const handlePasswordResetRequest = async (e) => {

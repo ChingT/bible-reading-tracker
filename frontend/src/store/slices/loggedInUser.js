@@ -5,11 +5,9 @@ export const loggedInUser = createSlice({
   initialState: { user: undefined, accessToken: undefined },
   reducers: {
     loginUser: (state, action) => {
-      state.user = action.payload.user;
       state.accessToken = action.payload.accessToken;
     },
     logoutUser: (state) => {
-      state.user = null;
       state.accessToken = null;
     },
   },

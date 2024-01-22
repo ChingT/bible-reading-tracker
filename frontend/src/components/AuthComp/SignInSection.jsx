@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import useApiRequest from "../../hooks/useApiRequest.js";
 import { loginUser } from "../../store/slices/loggedInUser.js";
 import { ButtonsStyle } from "../../styles/buttons.style.js";
@@ -16,31 +16,33 @@ import {
 
 function SignInSection() {
   const [user, setUser] = useState({ username: "", password: "" });
+  const { sendRequest, data, error } = useApiRequest();
+  const location = useLocation();
   const navigate = useNavigate();
-  const { sendRequest, data, error } = useApiRequest("noAuth");
   const dispatch = useDispatch();
 
   const handleInput = (e) => {
     setUser({ ...user, [e.target.id]: e.target.value });
   };
 
-  const handleLogin = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     sendRequest("post", "auth/access-token", user, true);
   };
 
   useEffect(() => {
     if (data !== null) {
-      dispatch(loginUser({ user: data.user, accessToken: data.access }));
-      localStorage.setItem("user", JSON.stringify(data.user));
-      localStorage.setItem("auth-token", data.access);
-      navigate("/profile");
+      const accessToken = data.access_token;
+      dispatch(loginUser({ accessToken: accessToken }));
+      localStorage.setItem("auth-token", accessToken);
+      const from = location.state?.from || { pathname: "/profile" };
+      navigate(from);
     }
-  }, [data, dispatch, navigate]);
+  }, [data, dispatch, navigate, location]);
 
   return (
     <AuthFormContainer>
-      <AuthForm onSubmit={handleLogin}>
+      <AuthForm onSubmit={handleSubmit}>
         <div className={"input-container"}>
           <FormTitle>Sign In</FormTitle>
           <InputFieldContainer>
@@ -71,7 +73,7 @@ function SignInSection() {
           {error?.detail && <p className={"error-message"}>{error.detail}</p>}
         </div>
         <div className={"form-footer"}>
-          <ButtonsStyle style={{ marginTop: "2.5rem" }} onClick={handleLogin}>
+          <ButtonsStyle style={{ marginTop: "2.5rem" }} onClick={handleSubmit}>
             Sign In
           </ButtonsStyle>
         </div>

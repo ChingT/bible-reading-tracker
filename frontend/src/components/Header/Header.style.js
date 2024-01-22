@@ -66,7 +66,7 @@ export const StyledImage = styled.img`
   filter: saturate(0.7) brightness(1.35);
 `;
 
-export const ContainerRight = styled.div`
+export const ContainerRight = styled.nav`
   display: flex;
   align-items: center;
   gap: 2rem;

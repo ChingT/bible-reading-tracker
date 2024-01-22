@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
-import Navigation from "../Navigation/Navigation.jsx";
+import Header from "../Header/Header.jsx";
 
 const AuthenticationContainer = styled.div`
   display: flex;
@@ -32,7 +32,7 @@ const HomePageContainer = styled.div`
 const Layout = () => {
   return (
     <>
-      <Navigation />
+      <Header />
       <HomePageContainer>
         <AuthenticationContainer>
           <Outlet />

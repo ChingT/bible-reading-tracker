@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import logoutImage from "../../assets/icon_logout.svg";
 import { logoutUser } from "../../store/slices/loggedInUser.js";
-import { ActionContainer, ActionsWrapper } from "./Navigation.style.js";
+import { ActionContainer, ActionsWrapper } from "./Header.style.js";
 
 const NavigationActionsContainer = ({ setShowMenu }) => {
   const dispatch = useDispatch();

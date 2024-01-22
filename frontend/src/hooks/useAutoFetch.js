@@ -1,14 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+
 import { useEffect } from "react";
 import useApiRequest from "./useApiRequest.js";
 
-const useAutoFetch = (method, url, requestData, trigger, auth) => {
-  const token = localStorage.getItem("auth-token");
+const useAutoFetch = (method, url, requestData, auth, trigger) => {
   const { sendRequest, data, error, loading } = useApiRequest(auth);
 
   useEffect(() => {
-    if (auth === "noAuth" || token) sendRequest(method, url, requestData);
-  }, [url, trigger]);
+    sendRequest(method, url, requestData);
+  }, [trigger]);
 
   return { data, error, loading };
 };
