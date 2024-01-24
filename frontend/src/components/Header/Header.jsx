@@ -24,25 +24,25 @@ const Header = () => {
   const isLoginPage = location.pathname === "/signin";
   const isSignUpPage = location.pathname === "/signup";
 
-  const signUpButtom = (
+  const signUpButton = (
     <Link to="/signup">
       <ButtonsStyle>Sign Up</ButtonsStyle>
     </Link>
   );
 
-  const signInButtom = (
+  const signInButton = (
     <Link to="/signin">
       <ButtonsStyle>Sign In</ButtonsStyle>
     </Link>
   );
-  const menuButtom = (
+  const menuButton = (
     <MenuContainer>
       <img src={MenuDot} alt="Menu" onClick={() => setShowMenu(!showMenu)} />
       {showMenu && <NavigationActionsContainer setShowMenu={setShowMenu} />}
     </MenuContainer>
   );
 
-  const profileButtom = (
+  const profileButton = (
     <Link to={"/profile"}>
       <Avatar src={avatarImage} alt="Avatar" />
     </Link>
@@ -59,13 +59,13 @@ const Header = () => {
       <ContainerRight>
         {isLoggedIn ? (
           <>
-            {profileButtom}
-            {menuButtom}
+            {profileButton}
+            {menuButton}
           </>
         ) : (
           <>
-            {isLoginPage && signUpButtom}
-            {(isSignUpPage || (!isLoginPage && !isSignUpPage)) && signInButtom}
+            {isLoginPage && signUpButton}
+            {(isSignUpPage || (!isLoginPage && !isSignUpPage)) && signInButton}
           </>
         )}
       </ContainerRight>
