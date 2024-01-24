@@ -1,15 +1,6 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
-export const AuthFormContainer = styled.div`
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-
 export const AuthForm = styled.form`
   width: 27%;
   display: flex;

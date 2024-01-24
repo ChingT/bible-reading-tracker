@@ -7,7 +7,6 @@ import { ButtonsStyle } from "../../styles/globalStyles.js";
 import {
   AlreadyHaveAnAccountNavLink,
   AuthForm,
-  AuthFormContainer,
   ErrorMessage,
   FormTitle,
   InputFieldContainer,
@@ -41,44 +40,42 @@ function SignInSection() {
   }, [data, dispatch, navigate, location]);
 
   return (
-    <AuthFormContainer>
-      <AuthForm onSubmit={handleSubmit}>
-        <div className={"input-container"}>
-          <FormTitle>Sign In</FormTitle>
-          <InputFieldContainer>
-            <div className={"input-wrapper"}>
-              <input
-                placeholder="Email"
-                type="email"
-                required
-                onChange={handleInput}
-                id="username"
-              />
-            </div>
-            {error?.email && <ErrorMessage>{error.email}</ErrorMessage>}
-          </InputFieldContainer>
-          <InputFieldContainer>
-            <div className={"input-wrapper"}>
-              <input
-                placeholder="Password"
-                type="password"
-                required
-                onChange={handleInput}
-                id="password"
-              />
-            </div>
-            {error?.password && <ErrorMessage>{error.password}</ErrorMessage>}
-          </InputFieldContainer>
-          {error?.detail && <p className={"error-message"}>{error.detail}</p>}
-        </div>
-        <ButtonsStyle onClick={handleSubmit}>Sign In</ButtonsStyle>
-        <ResetNavLink to="/password-reset/">Forgot password?</ResetNavLink>
-        <AlreadyHaveAnAccountNavLink to="/signup">
-          New to Bible Reading Tracker?
-          <br /> Create an account →
-        </AlreadyHaveAnAccountNavLink>
-      </AuthForm>
-    </AuthFormContainer>
+    <AuthForm onSubmit={handleSubmit}>
+      <div className={"input-container"}>
+        <FormTitle>Sign In</FormTitle>
+        <InputFieldContainer>
+          <div className={"input-wrapper"}>
+            <input
+              placeholder="Email"
+              type="email"
+              required
+              onChange={handleInput}
+              id="username"
+            />
+          </div>
+          {error?.email && <ErrorMessage>{error.email}</ErrorMessage>}
+        </InputFieldContainer>
+        <InputFieldContainer>
+          <div className={"input-wrapper"}>
+            <input
+              placeholder="Password"
+              type="password"
+              required
+              onChange={handleInput}
+              id="password"
+            />
+          </div>
+          {error?.password && <ErrorMessage>{error.password}</ErrorMessage>}
+        </InputFieldContainer>
+        {error?.detail && <p className={"error-message"}>{error.detail}</p>}
+      </div>
+      <ButtonsStyle onClick={handleSubmit}>Sign In</ButtonsStyle>
+      <ResetNavLink to="/password-reset/">Forgot password?</ResetNavLink>
+      <AlreadyHaveAnAccountNavLink to="/signup">
+        New to Bible Reading Tracker?
+        <br /> Create an account →
+      </AlreadyHaveAnAccountNavLink>
+    </AuthForm>
   );
 }
 
