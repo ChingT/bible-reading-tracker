@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import useApiRequest from "../../hooks/useApiRequest.js";
 import { loginUser } from "../../store/slices/loggedInUser.js";
-import { ButtonsStyle } from "../../styles/buttons.style.js";
+import { ButtonsStyle } from "../../styles/globalStyles.js";
 import {
   AlreadyHaveAnAccountNavLink,
   AuthForm,
@@ -12,7 +12,7 @@ import {
   FormTitle,
   InputFieldContainer,
   ResetNavLink,
-} from "../Layout/Layout.style.js";
+} from "./AuthComp.style.js";
 
 function SignInSection() {
   const [user, setUser] = useState({ username: "", password: "" });
@@ -67,17 +67,13 @@ function SignInSection() {
                 id="password"
               />
             </div>
-            <ResetNavLink to="/password-reset/">Forgot password?</ResetNavLink>
             {error?.password && <ErrorMessage>{error.password}</ErrorMessage>}
           </InputFieldContainer>
           {error?.detail && <p className={"error-message"}>{error.detail}</p>}
         </div>
-        <div className={"form-footer"}>
-          <ButtonsStyle style={{ marginTop: "2.5rem" }} onClick={handleSubmit}>
-            Sign In
-          </ButtonsStyle>
-        </div>
-        <AlreadyHaveAnAccountNavLink style={{ marginTop: "2rem" }} to="/signup">
+        <ButtonsStyle onClick={handleSubmit}>Sign In</ButtonsStyle>
+        <ResetNavLink to="/password-reset/">Forgot password?</ResetNavLink>
+        <AlreadyHaveAnAccountNavLink to="/signup">
           New to Bible Reading Tracker?
           <br /> Create an account →
         </AlreadyHaveAnAccountNavLink>

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import avatarImage from "../../assets/avatar.svg";
 import MenuDot from "../../assets/menu_dots.svg";
-import { ButtonsStyle } from "../../styles/buttons.style.js";
+import { ButtonsStyle } from "../../styles/globalStyles.js";
 import {
   Avatar,
   ContainerLeft,

@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useApiRequest from "../../hooks/useApiRequest.js";
-import { ButtonsStyle } from "../../styles/buttons.style.js";
+import { ButtonsStyle } from "../../styles/globalStyles.js";
 import {
-  AlreadyHaveAnAccountNavLink,
   AuthForm,
   AuthFormContainer,
   ErrorMessage,
   FormTitlePasswordReset,
   InputField,
-} from "../Layout/Layout.style.js";
+} from "./AuthComp.style.js";
 
 export default function PasswordResetRequest() {
   const [userEmail, setEmail] = useState("");
@@ -44,20 +43,10 @@ export default function PasswordResetRequest() {
             </div>
             {error?.email && <ErrorMessage>{error.email}</ErrorMessage>}
           </InputField>
-          <ButtonsStyle
-            style={{ marginTop: "1rem" }}
-            onClick={handlePasswordResetRequest}
-          >
-            Send password reset email
-          </ButtonsStyle>
         </div>
-        <AlreadyHaveAnAccountNavLink
-          to="/password-reset-validation"
-          style={{ marginTop: "-5rem" }}
-        >
-          Got validation code already? <br />
-          Validate here →
-        </AlreadyHaveAnAccountNavLink>
+        <ButtonsStyle onClick={handlePasswordResetRequest}>
+          Send password reset email
+        </ButtonsStyle>
       </AuthForm>
     </AuthFormContainer>
   );

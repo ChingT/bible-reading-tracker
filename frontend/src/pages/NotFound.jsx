@@ -1,10 +1,10 @@
-import { AuthFormContainer } from "../components/Layout/Layout.style.js";
+import { GeneralContainer } from "../components/Layout/Layout.style.js";
 
 const NotFound = () => {
   return (
-    <AuthFormContainer>
+    <GeneralContainer>
       <h1>The page you're looking for does not exist!</h1>
-    </AuthFormContainer>
+    </GeneralContainer>
   );
 };
 

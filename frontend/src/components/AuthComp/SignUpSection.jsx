@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useApiRequest from "../../hooks/useApiRequest.js";
-import { ButtonsStyle } from "../../styles/buttons.style.js";
+import { ButtonsStyle } from "../../styles/globalStyles.js";
 import {
   AlreadyHaveAnAccountNavLink,
   AuthForm,
@@ -8,7 +8,7 @@ import {
   ErrorMessage,
   FormTitle,
   InputFieldContainer,
-} from "../Layout/Layout.style.js";
+} from "./AuthComp.style.js";
 
 function SignUpSection() {
   const [user, setUser] = useState({
@@ -72,13 +72,12 @@ function SignUpSection() {
             )}
           </InputFieldContainer>
         </div>
-        <div>
-          <ButtonsStyle onClick={handleSubmit}>Sign Up</ButtonsStyle>
-        </div>
+        <ButtonsStyle onClick={handleSubmit}>Sign Up</ButtonsStyle>
+        <AlreadyHaveAnAccountNavLink to="/signin">
+          Already have an account?
+          <br /> Sign in →
+        </AlreadyHaveAnAccountNavLink>
       </AuthForm>
-      <AlreadyHaveAnAccountNavLink to="/signin">
-        Already have an account? Sign in →
-      </AlreadyHaveAnAccountNavLink>
     </AuthFormContainer>
   );
 }

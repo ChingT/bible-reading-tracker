@@ -1,11 +1,11 @@
 import { useParams } from "react-router";
 import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner.jsx";
-import ProfileHeader from "../components/UserProfile/Profile/ProfileHeader.jsx";
+import ProfileHeader from "../components/UserProfile/ProfileHeader.jsx";
 import {
   LeftBlock,
   ProfilePageMain,
   RightBlock,
-} from "../components/UserProfile/Profile/ProfileHeader.style.js";
+} from "../components/UserProfile/ProfileHeader.style.js";
 import useAutoFetch from "../hooks/useAutoFetch.js";
 
 function ProfilePage() {

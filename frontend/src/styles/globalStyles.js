@@ -15,7 +15,8 @@ const GlobalStyle = createGlobalStyle`
 
   #root {
     min-height: calc(100vh - 96px);
-    height: 100%;
+    height: 100vh;
+    min-height: 100vh;
     width: 100vw;
     background-size: 24px 24px;
     overflow-x: hidden;
@@ -46,33 +47,15 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-export const CardWithShadowStyles = styled.div`
-  box-shadow:
-    0px 0px 1px rgba(0, 0, 0, 0.2),
-    0px 10px 20px rgba(0, 0, 0, 0.05);
-  width: 100%;
-  height: 100%;
-  background-color: white;
-  border-radius: 0.3rem;
-`;
-
-export const CheckMark = styled.img`
-  width: 5rem;
-  aspect-ratio: 1/1;
-  margin-bottom: 2rem;
-  animation: scaleIn 400ms ease;
-
-  @keyframes scaleIn {
-    0% {
-      transform: scale(0);
-    }
-    80% {
-      transform: scale(1.3) rotate(-10deg);
-    }
-    100% {
-      transform: scale(1) rotate(0);
-    }
-  }
-`;
-
 export default GlobalStyle;
+
+export const ButtonsStyle = styled.button`
+  background-color: ${(props) => props.theme.colors.primary};
+  color: ${(props) => props.theme.fontColors.button};
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.25);
+  padding: 10px 20px 10px 20px;
+  cursor: pointer;
+  font-size: 19px;
+  font-weight: 600;
+`;
