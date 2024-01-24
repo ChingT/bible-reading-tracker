@@ -1,10 +1,18 @@
-import { GeneralContainer } from "../components/Layout/Layout.style.js";
+import { Link } from "react-router-dom";
+import { ButtonsStyle } from "../styles/globalStyles.js";
 
 const HeroPage = () => {
+  const button = (
+    <Link to="/plans">
+      <ButtonsStyle>Go to schedule</ButtonsStyle>
+    </Link>
+  );
+
   return (
-    <GeneralContainer>
+    <>
       <h1>Welcome to Bible Reading Tracking App</h1>
-    </GeneralContainer>
+      {button}
+    </>
   );
 };
 

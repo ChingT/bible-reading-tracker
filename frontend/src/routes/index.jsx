@@ -3,6 +3,7 @@ import PasswordReset from "../components/AuthComp/PasswordReset.jsx";
 import SignInSection from "../components/AuthComp/SignInSection.jsx";
 import SignUpSection from "../components/AuthComp/SignUpSection.jsx";
 import Layout from "../components/Layout/Layout.jsx";
+import Plans from "../components/Plan/Plans.jsx";
 import HeroPage from "../pages/HeroPage.jsx";
 import NotFound from "../pages/NotFound.jsx";
 import ProfilePage from "../pages/ProfilePage.jsx";
@@ -17,6 +18,7 @@ const PageRoutes = () => {
           <Route path="signin" element={<SignInSection />} />
           <Route path="signup" element={<SignUpSection />} />
           <Route path="password-reset" element={<PasswordReset />} />
+          <Route path="plans" element={<Plans />} />
 
           <Route path="*" element={<NotFound />} />
 
