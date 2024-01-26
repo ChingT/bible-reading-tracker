@@ -7,6 +7,19 @@ export const GridContainer = styled.div`
   grid-row-gap: 1rem;
 `;
 
+export const CardTitle = styled.div`
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 93%;
+  border-radius: 1rem;
+  padding: 1rem;
+  cursor: pointer;
+`;
+
 export const CardContainer = styled.div`
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   display: flex;
