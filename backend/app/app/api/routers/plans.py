@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Annotated, Any
 
 from fastapi import APIRouter, Query
 
@@ -9,10 +9,13 @@ from app.models.schedule import ScheduleOut
 
 router = APIRouter()
 
+OFFSET_QUERY = Annotated[int, Query(ge=0)]
+LIMIT_QUERY = Annotated[int, Query(le=366)]
+
 
 @router.get("/", response_model=list[PlanOut])
 async def list_plans(
-    session: SessionDep, offset: int = 0, limit: int = Query(default=100, le=100)
+    session: SessionDep, offset: OFFSET_QUERY = 0, limit: LIMIT_QUERY = 100
 ) -> Any:
     """Retrieve bible reading plans."""
     return await crud.plan.list(session, offset, limit)
@@ -22,8 +25,8 @@ async def list_plans(
 async def list_schedules_without_logged_in(
     session: SessionDep,
     plan: PlanDep,
-    offset: int = 0,
-    limit: int = Query(default=100, le=100),
+    offset: OFFSET_QUERY = 0,
+    limit: LIMIT_QUERY = 366,
 ) -> list[ScheduleOut]:
     """Retrieve daily schedules without user needed to be logged-in."""
     schedules = await crud.schedule.list_from_plan(session, plan.id, offset, limit)
@@ -35,8 +38,8 @@ async def list_schedules(
     session: SessionDep,
     current_user: CurrentUser,
     plan: PlanDep,
-    offset: int = 0,
-    limit: int = Query(default=100, le=100),
+    offset: OFFSET_QUERY = 0,
+    limit: LIMIT_QUERY = 366,
 ) -> list[ScheduleOut]:
     """Retrieve daily schedules.
 
@@ -50,8 +53,8 @@ async def list_schedules(
 async def list_schedules_finished_by_user(
     session: SessionDep,
     current_user: CurrentUser,
-    offset: int = 0,
-    limit: int = Query(default=100, le=100),
+    offset: OFFSET_QUERY = 0,
+    limit: LIMIT_QUERY = 366,
 ) -> list[ScheduleOut]:
     """Retrieve finished daily schedules for the logged-in user."""
     schedules = await crud.schedule.list_finished_by_user(
