@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import useApiRequest from "../../hooks/useApiRequest.js";
+import { CardContainer } from "./SchedulesGrid.style.js";
 
-function ScheduleComponent({ initSchedule, books }) {
+function ScheduleCard({ initSchedule, books }) {
   const isLoggedIn = useSelector((store) => store.loggedInUser.accessToken);
   const { sendRequest, data } = useApiRequest();
   const [schedule, setSchedule] = useState(initSchedule);
@@ -13,9 +14,10 @@ function ScheduleComponent({ initSchedule, books }) {
     if (data) setSchedule(data);
   }, [data]);
 
-  const handleToggleSelection = (schedule_id) => {
+  const handleToggleSelection = (e) => {
+    e.preventDefault();
     if (isLoggedIn)
-      sendRequest("patch", `plans/finished_schedule/${schedule_id}`);
+      sendRequest("patch", `plans/finished_schedule/${schedule.id}`);
     else navigate("/signin");
   };
 
@@ -32,16 +34,18 @@ function ScheduleComponent({ initSchedule, books }) {
     </div>
   );
   return (
-    <div>
-      <input
-        type="checkbox"
-        checked={schedule.is_finished_by_logged_in_user}
-        onChange={() => handleToggleSelection(schedule.id)}
-      />
-      <div>{schedule.date}</div>
+    <CardContainer onClick={handleToggleSelection}>
+      <div>
+        <input
+          type="checkbox"
+          checked={schedule.is_finished_by_logged_in_user}
+          readOnly
+        />
+        {schedule.date}
+      </div>
       {schedule.passages.map(PassageComponent)}
-    </div>
+    </CardContainer>
   );
 }
 
-export default ScheduleComponent;
+export default ScheduleCard;

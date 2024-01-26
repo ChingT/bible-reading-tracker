@@ -1,16 +1,17 @@
 import { useSelector } from "react-redux";
 import useAutoFetch from "../../hooks/useAutoFetch.js";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner.jsx";
-import ScheduleComponent from "./Schedule.jsx";
+import ScheduleCard from "./ScheduleCard.jsx";
+import { GridContainer } from "./SchedulesGrid.style.js";
 
-function Schedules({ plan_id }) {
+function SchedulesGrid({ plan_id }) {
   const isLoggedIn = useSelector((store) => store.loggedInUser.accessToken);
   const endpointToFetch = isLoggedIn
     ? `schedules`
     : `schedules_without_logged_in`;
   const { data: schedules } = useAutoFetch(
     "get",
-    `plans/${plan_id}/${endpointToFetch}?limit=10`
+    `plans/${plan_id}/${endpointToFetch}`
   );
   const { data: books } = useAutoFetch("get", "books");
 
@@ -19,15 +20,17 @@ function Schedules({ plan_id }) {
   return (
     <>
       <h3>Daily Schedules</h3>
-      {schedules.map((schedule) => (
-        <ScheduleComponent
-          key={schedule.id}
-          initSchedule={schedule}
-          books={books}
-        />
-      ))}
+      <GridContainer>
+        {schedules.map((schedule) => (
+          <ScheduleCard
+            key={schedule.id}
+            initSchedule={schedule}
+            books={books}
+          />
+        ))}
+      </GridContainer>
     </>
   );
 }
 
-export default Schedules;
+export default SchedulesGrid;
