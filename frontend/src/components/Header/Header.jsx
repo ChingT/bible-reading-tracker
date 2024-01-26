@@ -8,7 +8,6 @@ import {
   Avatar,
   ContainerLeft,
   ContainerRight,
-  HeaderContainer,
   MenuContainer,
   NavbarLink,
   StyledH1,
@@ -49,7 +48,7 @@ const Header = () => {
   );
 
   return (
-    <HeaderContainer>
+    <header>
       <ContainerLeft>
         <NavbarLink to="/">
           <StyledH1>Bible Reading Tracker</StyledH1>
@@ -69,7 +68,7 @@ const Header = () => {
           </>
         )}
       </ContainerRight>
-    </HeaderContainer>
+    </header>
   );
 };
 

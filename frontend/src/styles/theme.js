@@ -26,7 +26,7 @@ const theme = {
   breakPoints: {
     md: "min-width:800px",
   },
-  header_height: "96px",
+  header_height: "4rem",
 };
 
 export default theme;

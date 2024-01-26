@@ -36,6 +36,22 @@ const GlobalStyle = createGlobalStyle`
   margin-top: ${(props) => props.theme.header_height};
   }
 
+  header {
+  height: ${(props) => props.theme.header_height};
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow:
+    0px 0px 1px rgba(0, 0, 0, 0.2),
+    0px 10px 20px rgba(0, 0, 0, 0.05);
+  position: fixed;
+  top: 0;
+  z-index: 10;
+  padding: 0 2rem;
+  border-bottom: solid rgba(0, 119, 191, 1) 1px;
+  background-size: 24px 24px;
+  }
 
   a {
     text-decoration: none;
