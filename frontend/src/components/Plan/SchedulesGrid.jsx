@@ -18,20 +18,19 @@ function SchedulesGrid({ plan_id }) {
 
   if (!schedules || !books) return <LoadingSpinner />;
 
+  const firstDate = new Date(schedules[0].date);
+  const emptyCards = [...Array(firstDate.getDay())].map((i) => (
+    <div key={i}></div>
+  ));
+
   return (
-    <>
-      <h3>Daily Schedules</h3>
-      <GridContainer>
-        <Weekdays />
-        {schedules.map((schedule) => (
-          <ScheduleCard
-            key={schedule.id}
-            initSchedule={schedule}
-            books={books}
-          />
-        ))}
-      </GridContainer>
-    </>
+    <GridContainer>
+      <Weekdays />
+      {emptyCards}
+      {schedules.map((schedule) => (
+        <ScheduleCard key={schedule.id} initSchedule={schedule} books={books} />
+      ))}
+    </GridContainer>
   );
 }
 
