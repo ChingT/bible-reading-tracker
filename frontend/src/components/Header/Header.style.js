@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 export const ContainerLeft = styled.div`
@@ -28,11 +28,6 @@ export const NavbarLink = styled(NavLink)`
   gap: 1rem;
   border-bottom: 1.5px solid transparent; /* Add default border color */
 
-  h1 {
-    font-size: 33px;
-    font-weight: 400;
-  }
-
   &.active {
     border-color: #0077bf;
     color: #0077bf;
@@ -43,41 +38,18 @@ export const NavbarLink = styled(NavLink)`
   }
 `;
 
-export const StyledImage = styled.img`
-  width: 30px;
-  height: 30px;
-  filter: saturate(0.7) brightness(1.35);
-`;
-
 export const ContainerRight = styled.nav`
   display: flex;
   align-items: center;
   gap: 2rem;
 `;
 
-export const LogoWrapper = styled(Link)`
-  display: flex;
-  flex-direction: row;
-
-  img {
-    height: 55.4px;
-    width: 293.79px;
-  }
-`;
-
 export const StyledH1 = styled.h1`
   display: flex;
-  color: #0077bf;
-  font-size: 38px;
+  color: ${(props) => props.theme.colors.primary};
+  font-size: 2rem;
+  font-weight: 400;
   flex-direction: row;
-`;
-
-export const ProfileWrapper = styled(Link)`
-  img {
-    height: 20px;
-    width: 91px;
-    margin-right: 19rem;
-  }
 `;
 
 export const MenuContainer = styled.div`

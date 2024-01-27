@@ -5,28 +5,28 @@ export const GridContainer = styled.div`
   grid-template-columns: repeat(7, 1fr);
   width: 100%;
   grid-row-gap: 1rem;
+  margin-top: 2rem;
 `;
 
-export const CardTitle = styled.div`
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  font-weight: 500;
+const CardBase = styled.div`
+  box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
+  width: 90%;
+  border-radius: 1rem;
+  padding: 1rem;
+`;
+
+export const CardTitle = styled(CardBase)`
+  background-color: ${(props) => props.theme.colors.primary};
+  color: ${(props) => props.theme.colors.secondary};
+  font-weight: 600;
   align-items: center;
   justify-content: center;
-  width: 93%;
-  border-radius: 1rem;
-  padding: 1rem;
-  cursor: pointer;
+  cursor: default;
 `;
 
-export const CardContainer = styled.div`
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
-  width: 93%;
-  border-radius: 1rem;
-  padding: 1rem;
+export const CardContainer = styled(CardBase)`
   cursor: pointer;
 
   &:hover {
