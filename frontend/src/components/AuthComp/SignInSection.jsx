@@ -34,7 +34,7 @@ function SignInSection() {
       const accessToken = data.access_token;
       dispatch(loginUser({ accessToken: accessToken }));
       localStorage.setItem("auth-token", accessToken);
-      const from = location.state?.from || { pathname: "/plans" };
+      const from = location.state?.from || { pathname: "/" };
       navigate(from);
     }
   }, [data, dispatch, navigate, location]);
