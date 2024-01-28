@@ -6,11 +6,9 @@ import MenuDot from "../../assets/menu_dots.svg";
 import { ButtonsStyle } from "../../styles/globalStyles.js";
 import {
   Avatar,
-  ContainerLeft,
   ContainerRight,
   MenuContainer,
   NavbarLink,
-  StyledH1,
 } from "./Header.style.js";
 import NavigationActionsContainer from "./HeaderActionsContainer.jsx";
 
@@ -34,10 +32,17 @@ const Header = () => {
       <ButtonsStyle>Sign In</ButtonsStyle>
     </Link>
   );
+
+  const onClick = () => {
+    setShowMenu((prevState) => !prevState);
+  };
+
   const menuButton = (
     <MenuContainer>
-      <img src={MenuDot} alt="Menu" onClick={() => setShowMenu(!showMenu)} />
-      {showMenu && <NavigationActionsContainer setShowMenu={setShowMenu} />}
+      <img src={MenuDot} alt="Menu" onClick={onClick} />
+      {showMenu && (
+        <NavigationActionsContainer onMouseLeave={() => setShowMenu(false)} />
+      )}
     </MenuContainer>
   );
 
@@ -49,11 +54,9 @@ const Header = () => {
 
   return (
     <header>
-      <ContainerLeft>
-        <NavbarLink to="/">
-          <StyledH1>Bible Reading Tracker</StyledH1>
-        </NavbarLink>
-      </ContainerLeft>
+      <NavbarLink to="/">
+        <h1>Bible Reading Tracker</h1>
+      </NavbarLink>
 
       <ContainerRight>
         {isLoggedIn ? (
