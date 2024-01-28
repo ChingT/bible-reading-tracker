@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import useApiRequest from "../../hooks/useApiRequest.js";
+import Checkbox from "../../styles/checkbox.jsx";
 import { CardContainer } from "./SchedulesGrid.style.js";
 
 function ScheduleCard({ initSchedule, books }) {
@@ -33,14 +34,11 @@ function ScheduleCard({ initSchedule, books }) {
       </p>
     </div>
   );
+
   return (
     <CardContainer onClick={handleToggleSelection}>
       <div>
-        <input
-          type="checkbox"
-          checked={schedule.is_finished_by_logged_in_user}
-          readOnly
-        />
+        <Checkbox checked={schedule.is_finished_by_logged_in_user} />
         {schedule.date}
       </div>
       {schedule.passages.map(PassageComponent)}

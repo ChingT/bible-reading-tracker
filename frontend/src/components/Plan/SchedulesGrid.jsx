@@ -5,7 +5,7 @@ import ScheduleCard from "./ScheduleCard.jsx";
 import { GridContainer } from "./SchedulesGrid.style.js";
 import Weekdays from "./Weekdays.jsx";
 
-function SchedulesGrid({ plan_id }) {
+export default function SchedulesGrid({ plan_id }) {
   const isLoggedIn = useSelector((store) => store.loggedInUser.accessToken);
   const endpointToFetch = isLoggedIn
     ? `schedules`
@@ -19,7 +19,7 @@ function SchedulesGrid({ plan_id }) {
   if (!schedules || !books) return <LoadingSpinner />;
 
   const firstDate = new Date(schedules[0].date);
-  const emptyCards = [...Array(firstDate.getDay())].map((i) => (
+  const emptyCards = [...Array(firstDate.getDay())].map((_, i) => (
     <div key={i}></div>
   ));
 
@@ -33,5 +33,3 @@ function SchedulesGrid({ plan_id }) {
     </GridContainer>
   );
 }
-
-export default SchedulesGrid;
