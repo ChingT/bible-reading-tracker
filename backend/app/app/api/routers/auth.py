@@ -59,7 +59,7 @@ async def verify_access_token(
 ) -> None:
     """Verify if an access token is valid."""
     user_id = decode_token(token.access_token, CodeType.ACCESS)
-    if not user_id or not crud.user.get(session, id=user_id):
+    if not user_id or not await crud.user.get(session, id=user_id):
         raise credentials_exception
 
 
@@ -69,7 +69,7 @@ async def refresh_token(
 ) -> TokensResponse:
     """Get an access token using a refresh token."""
     user_id = decode_token(token.refresh_token, CodeType.REFRESH)
-    if user_id and crud.user.get(session, id=user_id):
+    if user_id and await crud.user.get(session, id=user_id):
         return generate_tokens_response(user_id)
     raise credentials_exception
 
