@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux";
 import useAutoFetch from "../../hooks/useAutoFetch.js";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner.jsx";
-import ScheduleCard from "./ScheduleCard.jsx";
 import { GridContainer } from "./SchedulesGrid.style.js";
+import SchedulesPerMonth from "./SchedulesPerMonth.jsx";
 import Weekdays from "./Weekdays.jsx";
 
 export default function SchedulesGrid({ plan_id }) {
@@ -10,26 +10,31 @@ export default function SchedulesGrid({ plan_id }) {
   const endpointToFetch = isLoggedIn
     ? `schedules`
     : `schedules_without_logged_in`;
-  const { data: schedules } = useAutoFetch(
+  const { data: allSchedules } = useAutoFetch(
     "get",
     `plans/${plan_id}/${endpointToFetch}`
   );
   const { data: books } = useAutoFetch("get", "books");
 
-  if (!schedules || !books) return <LoadingSpinner />;
+  if (!allSchedules || !books) return <LoadingSpinner />;
 
-  const firstDate = new Date(schedules[0].date);
-  const emptyCards = [...Array(firstDate.getDay())].map((_, i) => (
-    <div key={i}></div>
-  ));
+  const schedulesByMonth = allSchedules.reduce((acc, schedule) => {
+    const date = new Date(schedule.date);
+    const key = date.getMonth();
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(schedule);
+    return acc;
+  }, {});
 
   return (
-    <GridContainer>
-      <Weekdays />
-      {emptyCards}
-      {schedules.map((schedule) => (
-        <ScheduleCard key={schedule.id} initSchedule={schedule} books={books} />
+    <>
+      <GridContainer>
+        <Weekdays />
+      </GridContainer>
+
+      {Object.entries(schedulesByMonth).map((item) => (
+        <SchedulesPerMonth key={item[0]} schedules={item[1]} books={books} />
       ))}
-    </GridContainer>
+    </>
   );
 }

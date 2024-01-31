@@ -1,19 +1,16 @@
 import { CardTitle } from "./SchedulesGrid.style";
 
-function Weekdays() {
-  const weekdays = [
-    "Tag des Herrn",
-    "Montag",
-    "Dienstag",
-    "Mittwoch",
-    "Donnerstag",
-    "Freitag",
-    "Samstag",
-  ];
+export default function Weekdays() {
+  const numberOfDays = 7;
+  const weekdaysMap = {};
+  [...Array(numberOfDays)].forEach((_, i) => {
+    const date = new Date(2024, 0, i + 1);
+    weekdaysMap[date.getDay()] = date.toLocaleDateString("de-DE", {
+      weekday: "long",
+    });
+  });
 
-  return weekdays.map((weekday) => (
-    <CardTitle key={weekday}>{weekday}</CardTitle>
+  return [...Array(numberOfDays)].map((_, i) => (
+    <CardTitle key={weekdaysMap[i]}>{weekdaysMap[i]}</CardTitle>
   ));
 }
-
-export default Weekdays;
