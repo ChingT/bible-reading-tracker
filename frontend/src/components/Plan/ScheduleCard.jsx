@@ -1,3 +1,4 @@
+import Tooltip from "@mui/material/Tooltip";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -5,7 +6,19 @@ import useApiRequest from "../../hooks/useApiRequest.js";
 import Checkbox from "../../styles/checkbox.jsx";
 import { CardContainer } from "./SchedulesGrid.style.js";
 
-function ScheduleCard({ initSchedule, books }) {
+function Passage({ passage, books }) {
+  const book = books.find((book) => book.id === passage.book_id);
+  const full_text = `${book.full_name_de} ${passage.verses}`;
+  const short_text = `${book.short_name_de} ${passage.verses}`;
+
+  return (
+    <Tooltip title={full_text}>
+      <p>{short_text}</p>
+    </Tooltip>
+  );
+}
+
+export default function ScheduleCard({ initSchedule, books }) {
   const isLoggedIn = useSelector((store) => store.loggedInUser.accessToken);
   const { sendRequest, data } = useApiRequest();
   const [schedule, setSchedule] = useState(initSchedule);
@@ -22,28 +35,16 @@ function ScheduleCard({ initSchedule, books }) {
     else navigate("/signin");
   };
 
-  const find_book_name = (book_id) => {
-    const book = books.find((book) => book.id === book_id);
-    return book.short_name_de;
-  };
-
-  const PassageComponent = (passage) => (
-    <div key={passage.id}>
-      <p>
-        {find_book_name(passage.book_id)} {passage.verses}
-      </p>
-    </div>
-  );
-
   return (
     <CardContainer onClick={handleToggleSelection}>
       <div>
         <Checkbox checked={schedule.is_finished_by_logged_in_user} />
         {schedule.date}
       </div>
-      {schedule.passages.map(PassageComponent)}
+
+      {schedule.passages.map((passage) => (
+        <Passage key={passage.id} passage={passage} books={books} />
+      ))}
     </CardContainer>
   );
 }
-
-export default ScheduleCard;
