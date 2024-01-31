@@ -18,6 +18,14 @@ function Passage({ passage, books }) {
   );
 }
 
+function CardDate({ date }) {
+  const day = new Intl.DateTimeFormat("de-DE", {
+    month: "short",
+    day: "numeric",
+  }).format(new Date(date));
+  return <p>{day}</p>;
+}
+
 export default function ScheduleCard({ initSchedule, books }) {
   const isLoggedIn = useSelector((store) => store.loggedInUser.accessToken);
   const { sendRequest, data } = useApiRequest();
@@ -39,7 +47,7 @@ export default function ScheduleCard({ initSchedule, books }) {
     <CardContainer onClick={handleToggleSelection}>
       <div>
         <Checkbox checked={schedule.is_finished_by_logged_in_user} />
-        {schedule.date}
+        <CardDate date={schedule.date} />
       </div>
 
       {schedule.passages.map((passage) => (
