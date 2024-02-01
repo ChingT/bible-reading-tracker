@@ -10,8 +10,8 @@ if TYPE_CHECKING:
 
 
 class BookEnum(str, Enum):
-    NT = "New Testament"
-    OT = "Old Testament"
+    NT = "NT"
+    OT = "OT"
 
 
 class Book(BaseUUIDModel, table=True):
