@@ -6,15 +6,14 @@ import useApiRequest from "../../hooks/useApiRequest.js";
 import Checkbox from "../../styles/checkbox.jsx";
 import { CardContainer } from "./Schedule.style.js";
 
-export default function ScheduleCard({ initSchedule }) {
+export default function ScheduleCard({
+  initSchedule,
+  setNumFinishedSchedules,
+}) {
   const isLoggedIn = useSelector((store) => store.loggedInUser.accessToken);
   const { sendRequest, data } = useApiRequest();
   const [schedule, setSchedule] = useState(initSchedule);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (data) setSchedule(data);
-  }, [data]);
 
   const handleToggleSelection = (e) => {
     e.preventDefault();
@@ -24,6 +23,17 @@ export default function ScheduleCard({ initSchedule }) {
       navigate("/signin");
     }
   };
+
+  useEffect(() => {
+    if (data) {
+      setSchedule(data);
+      if (data.is_finished_by_logged_in_user) {
+        setNumFinishedSchedules((prev) => prev + 1);
+      } else {
+        setNumFinishedSchedules((prev) => prev - 1);
+      }
+    }
+  }, [data, setNumFinishedSchedules]);
 
   return (
     <CardContainer onClick={handleToggleSelection}>

@@ -1,7 +1,10 @@
 import { GridContainer } from "./Schedule.style.js";
 import ScheduleCard from "./ScheduleCard.jsx";
 
-export default function SchedulesPerMonth({ schedules }) {
+export default function SchedulesPerMonth({
+  schedules,
+  setNumFinishedSchedules,
+}) {
   const firstDay = new Date(schedules[0].date);
   const month = new Intl.DateTimeFormat("de-DE", {
     month: "long",
@@ -16,7 +19,11 @@ export default function SchedulesPerMonth({ schedules }) {
       <GridContainer>
         {emptyCards}
         {schedules.map((schedule) => (
-          <ScheduleCard key={schedule.id} initSchedule={schedule} />
+          <ScheduleCard
+            key={schedule.id}
+            initSchedule={schedule}
+            setNumFinishedSchedules={setNumFinishedSchedules}
+          />
         ))}
       </GridContainer>
     </div>
