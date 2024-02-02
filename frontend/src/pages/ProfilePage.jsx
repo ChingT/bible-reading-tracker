@@ -10,7 +10,7 @@ import useAutoFetch from "../hooks/useAutoFetch.js";
 
 function ProfilePage() {
   const { profileId } = useParams();
-  const endpointToFetch = profileId ? `users/${profileId}/` : "users/me/";
+  const endpointToFetch = profileId ? `users/${profileId}` : "users/me";
   const { data } = useAutoFetch("get", endpointToFetch, "", true, profileId);
 
   if (!data) return <LoadingSpinner />;

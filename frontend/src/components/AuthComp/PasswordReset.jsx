@@ -16,7 +16,7 @@ export default function PasswordResetRequest() {
 
   const handlePasswordResetRequest = async (e) => {
     e.preventDefault();
-    sendRequest("post", "auth/password-reset/", { email: userEmail });
+    sendRequest("post", "auth/password-reset", { email: userEmail });
   };
 
   useEffect(() => {

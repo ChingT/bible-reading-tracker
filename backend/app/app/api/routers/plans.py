@@ -13,7 +13,7 @@ OFFSET_QUERY = Annotated[int, Query(ge=0)]
 LIMIT_QUERY = Annotated[int, Query(le=366)]
 
 
-@router.get("/", response_model=list[PlanOut])
+@router.get("", response_model=list[PlanOut])
 async def list_plans(
     session: SessionDep, offset: OFFSET_QUERY = 0, limit: LIMIT_QUERY = 100
 ) -> Any:
