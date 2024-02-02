@@ -19,7 +19,7 @@ export default function SchedulesGrid({ plan_id }) {
 
   const schedulesByMonth = allSchedules.reduce((acc, schedule) => {
     const date = new Date(schedule.date);
-    const key = date.getMonth();
+    const key = `${date.getFullYear()}-${date.getMonth()}`;
     if (!acc[key]) acc[key] = [];
     acc[key].push(schedule);
     return acc;
