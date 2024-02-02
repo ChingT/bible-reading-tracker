@@ -70,3 +70,13 @@ async def toggle_finished_schedule(
     """Toggle finished daily schedule for the logged-in user."""
     schedule = await crud.schedule.toggle_finished(session, schedule, current_user)
     return ScheduleOut.construct(schedule, current_user)
+
+
+@router.get("/{plan_id}/progress")
+async def get_progress(
+    session: SessionDep, plan: PlanDep, current_user: CurrentUser
+) -> int:
+    """Retrieve the number of finished schedules of a plan for the logged-in user."""
+    return await crud.schedule.get_num_finished_schedules(
+        session, plan.id, current_user.id
+    )

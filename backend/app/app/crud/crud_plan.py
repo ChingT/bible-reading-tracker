@@ -1,7 +1,7 @@
 from collections.abc import Sequence
 from uuid import UUID
 
-from sqlmodel import SQLModel, select
+from sqlmodel import SQLModel, func, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.crud.base import CRUDBase
@@ -55,6 +55,17 @@ class CRUDSchedule(CRUDBase[Schedule, ScheduleCreate, SQLModel]):
         )
         result = await session.exec(query)
         return result.all()
+
+    async def get_num_finished_schedules(
+        self, session: AsyncSession, plan_id: UUID, user_id: UUID
+    ) -> int:
+        query = (
+            select(func.count(Schedule.id))
+            .join(UserScheduleLink)
+            .where(Schedule.plan_id == plan_id, UserScheduleLink.user_id == user_id)
+        )
+        result = await session.exec(query)
+        return result.one()
 
 
 plan = CRUDPlan(Plan)
