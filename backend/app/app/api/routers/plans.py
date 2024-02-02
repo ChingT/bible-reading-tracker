@@ -3,7 +3,7 @@ from typing import Annotated, Any
 from fastapi import APIRouter, Query
 
 from app import crud
-from app.api.deps import CurrentUser, PlanDep, ScheduleDep, SessionDep
+from app.api.deps import CurrentUser, PlanDep, ScheduleDep, SessionDep, UserDep
 from app.models.plan import PlanOut
 from app.models.schedule import ScheduleOut
 
@@ -72,11 +72,7 @@ async def toggle_finished_schedule(
     return ScheduleOut.construct(schedule, current_user)
 
 
-@router.get("/{plan_id}/progress")
-async def get_progress(
-    session: SessionDep, plan: PlanDep, current_user: CurrentUser
-) -> int:
-    """Retrieve the number of finished schedules of a plan for the logged-in user."""
-    return await crud.schedule.get_num_finished_schedules(
-        session, plan.id, current_user.id
-    )
+@router.get("/{plan_id}/progress/{user_id}")
+async def get_progress(session: SessionDep, plan: PlanDep, user: UserDep) -> int:
+    """Retrieve the number of finished schedules of a plan for the user."""
+    return await crud.schedule.get_num_finished_schedules(session, plan.id, user.id)
