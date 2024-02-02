@@ -18,7 +18,7 @@ source_root = Path("app/initial_data")
 
 
 async def populate_schedules(session: AsyncSession) -> None:
-    name = "Sechsmonatiger Lesezeitplan"
+    name = "6-monatiger Lesezeitplan"
     plan = await crud.plan.get_by_title(session, name)
     if plan is None:
         raise NameNotFoundException(Plan, name)
