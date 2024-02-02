@@ -10,7 +10,7 @@ from app.models.passage import PassageOut
 router = APIRouter()
 
 
-@router.get("/{book_type}", response_model=list[BookOut])
+@router.get("", response_model=list[BookOut])
 async def list_books(
     session: SessionDep,
     book_type: BookEnum | None = None,
