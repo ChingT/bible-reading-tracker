@@ -1,4 +1,4 @@
-import { CardTitle } from "./SchedulesGrid.style";
+import { CardTitle } from "./Schedule.style";
 
 export default function Weekdays() {
   const numberOfDays = 7;

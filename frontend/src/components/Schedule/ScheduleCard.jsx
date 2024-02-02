@@ -5,13 +5,13 @@ import { useNavigate } from "react-router-dom";
 import useApiRequest from "../../hooks/useApiRequest.js";
 import Checkbox from "../../styles/checkbox.jsx";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner.jsx";
-import { CardContainer } from "./SchedulesGrid.style.js";
+import { CardContainer } from "./Schedule.style.js";
 
 function Passage({ passage }) {
   const books = useSelector((store) => store.loadedBooks.books);
   const book = books.find((book) => book.id === passage.book_id);
   if (!book) return <LoadingSpinner />;
-  
+
   const full_text = `${book.full_name_de} ${passage.verses}`;
   const short_text = `${book.short_name_de} ${passage.verses}`;
 

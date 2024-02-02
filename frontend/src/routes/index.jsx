@@ -3,8 +3,8 @@ import PasswordReset from "../components/AuthComp/PasswordReset.jsx";
 import SignInSection from "../components/AuthComp/SignInSection.jsx";
 import SignUpSection from "../components/AuthComp/SignUpSection.jsx";
 import Layout from "../components/Layout/Layout.jsx";
-import Plans from "../components/Plan/Plans.jsx";
 import NotFound from "../pages/NotFound.jsx";
+import Plans from "../pages/Plans.jsx";
 import ProfilePage from "../pages/ProfilePage.jsx";
 import ProtectedRoutes from "./ProtectedRoutes.jsx";
 

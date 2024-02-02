@@ -1,5 +1,5 @@
+import { GridContainer } from "./Schedule.style.js";
 import ScheduleCard from "./ScheduleCard.jsx";
-import { GridContainer } from "./SchedulesGrid.style.js";
 
 export default function SchedulesPerMonth({ schedules }) {
   const firstDay = new Date(schedules[0].date);

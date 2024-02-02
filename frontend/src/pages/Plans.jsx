@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import useAutoFetch from "../../hooks/useAutoFetch.js";
-import { loadBooks } from "../../store/slices/loadedBooks.js";
-import LoadingSpinner from "../LoadingSpinner/LoadingSpinner.jsx";
-import SchedulesGrid from "./SchedulesGrid.jsx";
+import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner.jsx";
+import SchedulesGrid from "../components/Schedule/SchedulesGrid.jsx";
+import useAutoFetch from "../hooks/useAutoFetch.js";
+import { loadBooks } from "../store/slices/loadedBooks.js";
 
 function Plans() {
   const { data } = useAutoFetch("get", "plans", null, true);

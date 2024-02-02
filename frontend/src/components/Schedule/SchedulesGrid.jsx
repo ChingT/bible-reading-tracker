@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import useAutoFetch from "../../hooks/useAutoFetch.js";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner.jsx";
-import { GridContainer } from "./SchedulesGrid.style.js";
+import { GridContainer } from "./Schedule.style.js";
 import SchedulesPerMonth from "./SchedulesPerMonth.jsx";
 import Weekdays from "./Weekdays.jsx";
 
