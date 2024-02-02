@@ -19,7 +19,7 @@ function Plans() {
     if (books) dispatch(loadBooks(books));
   }, [books, dispatch]);
 
-  if (!plans) return <LoadingSpinner />;
+  if (!plans || !books) return <LoadingSpinner />;
 
   const PlanComponent = (plan) => (
     <div key={plan.id}>

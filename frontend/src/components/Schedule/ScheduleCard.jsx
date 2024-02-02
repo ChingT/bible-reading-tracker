@@ -4,31 +4,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import useApiRequest from "../../hooks/useApiRequest.js";
 import Checkbox from "../../styles/checkbox.jsx";
-import LoadingSpinner from "../LoadingSpinner/LoadingSpinner.jsx";
 import { CardContainer } from "./Schedule.style.js";
-
-function Passage({ passage }) {
-  const books = useSelector((store) => store.loadedBooks.books);
-  const book = books.find((book) => book.id === passage.book_id);
-  if (!book) return <LoadingSpinner />;
-
-  const full_text = `${book.full_name_de} ${passage.verses}`;
-  const short_text = `${book.short_name_de} ${passage.verses}`;
-
-  return (
-    <Tooltip title={full_text}>
-      <p>{short_text}</p>
-    </Tooltip>
-  );
-}
-
-function CardDate({ date }) {
-  const day = new Intl.DateTimeFormat("de-DE", {
-    month: "short",
-    day: "numeric",
-  }).format(new Date(date));
-  return <p>{day}</p>;
-}
 
 export default function ScheduleCard({ initSchedule }) {
   const isLoggedIn = useSelector((store) => store.loggedInUser.accessToken);
@@ -42,9 +18,11 @@ export default function ScheduleCard({ initSchedule }) {
 
   const handleToggleSelection = (e) => {
     e.preventDefault();
-    if (isLoggedIn)
+    if (isLoggedIn) {
       sendRequest("patch", `plans/finished_schedule/${schedule.id}`);
-    else navigate("/signin");
+    } else {
+      navigate("/signin");
+    }
   };
 
   return (
@@ -58,5 +36,27 @@ export default function ScheduleCard({ initSchedule }) {
         <Passage key={passage.id} passage={passage} />
       ))}
     </CardContainer>
+  );
+}
+
+const dateStyle = { month: "short", day: "numeric" };
+
+function CardDate({ date }) {
+  const day = new Intl.DateTimeFormat("de-DE", dateStyle).format(
+    new Date(date)
+  );
+  return <p>{day}</p>;
+}
+
+function Passage({ passage }) {
+  const books = useSelector((store) => store.loadedBooks.books);
+  const book = books.find((book) => book.id === passage.book_id);
+  const fullName = `${book.full_name_de} ${passage.verses}`;
+  const shortName = `${book.short_name_de} ${passage.verses}`;
+
+  return (
+    <Tooltip title={fullName}>
+      <p>{shortName}</p>
+    </Tooltip>
   );
 }
