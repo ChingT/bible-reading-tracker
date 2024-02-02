@@ -14,9 +14,8 @@ export default function SchedulesGrid({ plan_id }) {
     "get",
     `plans/${plan_id}/${endpointToFetch}`
   );
-  const { data: books } = useAutoFetch("get", "books");
 
-  if (!allSchedules || !books) return <LoadingSpinner />;
+  if (!allSchedules) return <LoadingSpinner />;
 
   const schedulesByMonth = allSchedules.reduce((acc, schedule) => {
     const date = new Date(schedule.date);
@@ -33,7 +32,7 @@ export default function SchedulesGrid({ plan_id }) {
       </GridContainer>
 
       {Object.entries(schedulesByMonth).map((item) => (
-        <SchedulesPerMonth key={item[0]} schedules={item[1]} books={books} />
+        <SchedulesPerMonth key={item[0]} schedules={item[1]} />
       ))}
     </>
   );

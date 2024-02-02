@@ -1,15 +1,23 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import useAutoFetch from "../../hooks/useAutoFetch.js";
+import { loadBooks } from "../../store/slices/loadedBooks.js";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner.jsx";
 import SchedulesGrid from "./SchedulesGrid.jsx";
 
 function Plans() {
   const { data } = useAutoFetch("get", "plans", null, true);
+  const { data: books } = useAutoFetch("get", "books");
   const [plans, setPlans] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (data) setPlans(data);
   }, [data]);
+
+  useEffect(() => {
+    if (books) dispatch(loadBooks(books));
+  }, [books, dispatch]);
 
   if (!plans) return <LoadingSpinner />;
 
