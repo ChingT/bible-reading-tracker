@@ -17,11 +17,16 @@ export default function SchedulesGrid({ plan_id }) {
     "get",
     `plans/${plan_id}/${endpointToFetch}`
   );
-  const { data } = useAutoFetch("get", `plans/${plan_id}/progress`, null, true);
 
   useEffect(() => {
-    if (data) setNumFinishedSchedules(data);
-  }, [data]);
+    if (allSchedules) {
+      setNumFinishedSchedules(
+        allSchedules.filter(
+          (schedule) => schedule.is_finished_by_logged_in_user
+        ).length
+      );
+    }
+  }, [allSchedules]);
 
   if (!allSchedules) return <LoadingSpinner />;
 
@@ -35,12 +40,10 @@ export default function SchedulesGrid({ plan_id }) {
 
   return (
     <>
-      {isLoggedIn && (
-        <ProgressBar
-          numFinishedSchedules={numFinishedSchedules}
-          numSchedules={allSchedules.length}
-        />
-      )}
+      <ProgressBar
+        numFinishedSchedules={numFinishedSchedules}
+        numSchedules={allSchedules.length}
+      />
 
       <GridContainer>
         <Weekdays />
